@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,8 +6,11 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     int PlayerSpeed = 5;
+    bool Jumped = false;
+    bool DoubleJump = false;
 
     Rigidbody2D rb2d;
+    [SerializeField] private TrailRenderer TR;
 
     private void Start()
     {
@@ -22,10 +26,31 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.Translate(-transform.right * Time.deltaTime * PlayerSpeed);
         }
-        
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            rb2d.AddForce(Vector2.up * 9, ForceMode2D.Impulse);
+            if (Jumped == false)
+            {
+                rb2d.AddForce(Vector2.up * 9, ForceMode2D.Impulse);
+                Jumped = true;
+            }
+            else if (DoubleJump == false)
+            {
+                rb2d.AddForce(Vector2.up * 4.5f, ForceMode2D.Impulse);
+                DoubleJump = true;
+                TR.emitting = true;
+            }
+            else
+            {
+                return;
+            }
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Jumped = false;
+        DoubleJump = false;
+        TR.emitting = false;
     }
 }
