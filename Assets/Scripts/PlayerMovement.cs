@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
     bool DoubleJump = false;
 
     Rigidbody2D rb2d;
-    [SerializeField] private TrailRenderer TR;
 
     private void Start()
     {
@@ -38,7 +37,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 rb2d.AddForce(Vector2.up * 4.5f, ForceMode2D.Impulse);
                 DoubleJump = true;
-                TR.emitting = true;
             }
             else
             {
@@ -51,6 +49,5 @@ public class PlayerMovement : MonoBehaviour
     {
         Jumped = false;
         DoubleJump = false;
-        TR.emitting = false;
     }
 }
