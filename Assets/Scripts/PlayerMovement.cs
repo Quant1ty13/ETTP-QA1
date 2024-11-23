@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        TR.emitting = false;
     }
     private void Update()
     {
