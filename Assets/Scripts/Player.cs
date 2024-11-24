@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Player : PlayerStat
 {
+    [SerializeField] private GameObject GameOver;
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Trap"))
@@ -18,6 +19,7 @@ public class Player : PlayerStat
                 if (playerHealth < 0)
                 {
                     Destroy(gameObject);
+                    GameOver.SetActive(true);
                 }
             }
         }
