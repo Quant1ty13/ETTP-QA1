@@ -16,11 +16,12 @@ public class PlayerMovement : MonoBehaviour
     int PlayerSpeed = 5;
     public PlayerController playerInputs;
     bool CanDoubleJump = false;
-    bool hasJumped = false;
+    public bool hasJumped = false;
+    [SerializeField] GroundCheck groundCheck;
 
     Rigidbody2D rb2d;
     public SpriteRenderer spriteRender;
-    [SerializeField] private TrailRenderer TR;
+    [SerializeField] public TrailRenderer TR;
     private Vector2 movement;
 
     private void Awake()
@@ -64,9 +65,9 @@ public class PlayerMovement : MonoBehaviour
                     }
                     break;
                 case false:
-                    rb2d.AddForce(Vector2.up * 8, ForceMode2D.Impulse);
-                    CanDoubleJump = true;
-                    hasJumped = true;
+                        rb2d.AddForce(Vector2.up * 8, ForceMode2D.Impulse);
+                        CanDoubleJump = true;
+                        hasJumped = true;
                     break;
             }
         }
@@ -108,12 +109,11 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Dashing = false;
-        rb2d.gravityScale = 1.6f;
-        hasJumped = false;
-        TR.emitting = false;
+        rb2d.gravityScale = 1.8f;
 
         if (collision.gameObject.CompareTag("Trap"))
         {
+            groundCheck.spriteRender.color = Color.red;
             spriteRender.color = Color.red;
             whatCooldown = "hurtchange";
             StartCoroutine(Cooldown());
@@ -127,12 +127,14 @@ public class PlayerMovement : MonoBehaviour
         {
             case "hurtchange":
                 yield return new WaitForSeconds(0.5f);
+                groundCheck.spriteRender.color = Color.yellow;
                 spriteRender.color = Color.yellow;
                 break;
             case "dash":
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.75f);
                 Dashing = false;
-                rb2d.gravityScale = 1.6f;
+                rb2d.gravityScale = 1.8f;
+                rb2d.velocity = new Vector2(0, 0);
                 yield return new WaitForSeconds(1.5f);
                 canDash = true;
                 break;
