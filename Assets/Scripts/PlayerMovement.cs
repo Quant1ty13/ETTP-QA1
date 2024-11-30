@@ -15,26 +15,31 @@ public class PlayerMovement : MonoBehaviour
     string dir;
     public float DashPower;
 
+    [Header ("Player Movement")]
     public int PlayerSpeed = 5;
     public int PlayerSprint = 8;
     private bool Sprinting = false;
     public PlayerController playerInputs;
 
+    [Header("Jumping Mechanics")]
     public float jumpDash = 5f;
     public float sprintJump = 6f;
     public float JumpHeight = 10;
     public float Coyotetime = 0.2f;
     private float timeAfterJump;
-    public bool hasJumped = false;
+    private bool hasJumped = false;
     private bool onGround = true;
 
+    [Header("Miscellaneous")]
     [SerializeField] Rigidbody2D rb2d;
     public SpriteRenderer spriteRender;
     [SerializeField] public TrailRenderer TR;
+    AudioSource dashSound;
     private Vector2 movement;
 
     private void Awake()
     {
+        dashSound = GetComponent<AudioSource>();
         originalGravity = rb2d.gravityScale;
         playerInputs = new PlayerController();
     }
@@ -128,6 +133,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Dash()
     {
+        dashSound.Play();
         hasJumped = false;
         onGround = true;
         dashJump = true;
