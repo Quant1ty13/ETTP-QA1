@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Trap
   - Ground
+  - Jump_Wall
+  - Enemy
+  - Leftjump_Wall
+  - Win
+  - Tutorial
   layers:
   - Default
   - TransparentFX

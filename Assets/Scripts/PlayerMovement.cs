@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     float originalGravity;
-    bool Dashing = false;
+    public bool Dashing = false;
     bool canDash = true;
     bool dashJump = false;
     string whatCooldown;
@@ -26,9 +27,11 @@ public class PlayerMovement : MonoBehaviour
     public float sprintJump = 6f;
     public float JumpHeight = 10;
     public float Coyotetime = 0.2f;
+    public float wallJumpHeight;
     private float timeAfterJump;
-    private bool hasJumped = false;
-    private bool onGround = true;
+    public bool hasJumped = false;
+    public bool onGround = true;
+    private bool wallJump = false;
 
     [Header("Miscellaneous")]
     [SerializeField] Rigidbody2D rb2d;
@@ -39,6 +42,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        onGround = true;
+        hasJumped = false;
         dashSound = GetComponent<AudioSource>();
         originalGravity = rb2d.gravityScale;
         playerInputs = new PlayerController();
@@ -99,6 +104,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 rb2d.AddForce(Vector2.up * sprintJump, ForceMode2D.Impulse);
             }
+            else if (wallJump == true)
+            {
+                rb2d.AddForce(Vector2.up * wallJumpHeight, ForceMode2D.Impulse);
+            }
             else
             {
                 rb2d.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
@@ -142,6 +151,7 @@ public class PlayerMovement : MonoBehaviour
         canDash = false;
         whatCooldown = "dash";
         rb2d.gravityScale = 0;
+        Debug.Log("gravity set to 0");
         switch (dir)
         {
             case "left":
@@ -157,26 +167,35 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        Vector2 impulse = new Vector2(-2, 0);
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Trap"))
         {
             onGround = true;
             hasJumped = false;
             TR.emitting = false;
         }
 
-        if (Dashing == true)
+        if (Dashing == true && !collision.gameObject.CompareTag("Enemy"))
         {
             Dashing = false;
             rb2d.gravityScale = originalGravity;
         }
 
-        if (collision.gameObject.CompareTag("Trap"))
+        if (collision.gameObject.CompareTag("Jump_Wall") || collision.gameObject.CompareTag("Leftjump_Wall"))
+        {
+            onGround = true;
+            hasJumped = false;
+            wallJump = true;
+            if (collision.gameObject.CompareTag("Leftjump_Wall")) { rb2d.AddForce(-impulse, ForceMode2D.Impulse); }
+            else { rb2d.AddForce(impulse, ForceMode2D.Impulse); }
+        }
+
+        if (collision.gameObject.CompareTag("Trap") || collision.gameObject.CompareTag("Enemy") && Dashing == false)
         {
             spriteRender.color = Color.red;
             whatCooldown = "hurtchange";
             StartCoroutine(Cooldown());
         }
-
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -184,6 +203,14 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             onGround = false;
+        }
+
+        if (collision.gameObject.CompareTag("Jump_Wall") || collision.gameObject.CompareTag("Leftjump_Wall"))
+        {
+            onGround = true;
+            hasJumped = false;
+            wallJump = false;
+            rb2d.velocity = new Vector2(0,0);
         }
     }
 
@@ -197,7 +224,8 @@ public class PlayerMovement : MonoBehaviour
                 break;
             case "dash":
                 yield return new WaitForSeconds(0.75f);
-                onGround = false;
+                Debug.Log("gravity is set to normal");
+                // onGround = false; might completely remove this later.
                 Dashing = false;
                 dashJump = false;
                 rb2d.gravityScale = originalGravity;
