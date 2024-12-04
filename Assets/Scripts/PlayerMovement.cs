@@ -66,52 +66,24 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update()
     {
-        if (onGround != true)
-        {
-            timeAfterJump -= Time.deltaTime;
-        }
-        else
-        {
-            timeAfterJump = Coyotetime;
-        }
-
-        if (timeAfterJump < 0)
-        {
-            hasJumped = true;
-        }
+        if (onGround != true) {timeAfterJump -= Time.deltaTime;}
+        else {timeAfterJump = Coyotetime;}
+        if (timeAfterJump < 0) {hasJumped = true;}
 
         movement = playerInputs.Action.Movement.ReadValue<Vector2>();
         if (Dashing == false)
         {
-            if (Sprinting == true)
-            {
-                transform.Translate(new Vector2(movement.x, movement.y) * Time.deltaTime * PlayerSprint);
-            }
-            else
-            {
-                transform.Translate(new Vector2(movement.x, movement.y) * Time.deltaTime * PlayerSpeed);
-            }
+            if (Sprinting == true) {transform.Translate(new Vector2(movement.x, movement.y) * Time.deltaTime * PlayerSprint);}
+            else {transform.Translate(new Vector2(movement.x, movement.y) * Time.deltaTime * PlayerSpeed);}
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && hasJumped == false)
         {
             Debug.Log("Jumped");
-            if (dashJump == true)
-            {
-                rb2d.AddForce(Vector2.up * jumpDash, ForceMode2D.Impulse);
-            }
-            else if (Sprinting == true)
-            {
-                rb2d.AddForce(Vector2.up * sprintJump, ForceMode2D.Impulse);
-            }
-            else if (wallJump == true)
-            {
-                rb2d.AddForce(Vector2.up * wallJumpHeight, ForceMode2D.Impulse);
-            }
-            else
-            {
-                rb2d.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
-            }
+            if (dashJump == true) { rb2d.AddForce(Vector2.up * jumpDash, ForceMode2D.Impulse);}
+            else if (Sprinting == true) { rb2d.AddForce(Vector2.up * sprintJump, ForceMode2D.Impulse);}
+            else if (wallJump == true){rb2d.AddForce(Vector2.up * wallJumpHeight, ForceMode2D.Impulse);}
+            else{rb2d.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);}
             hasJumped = true;
         }
 
@@ -129,15 +101,8 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            Sprinting = true;
-        }
-
-        if (!Input.GetKey(KeyCode.LeftControl) && Sprinting == true)
-        {
-            Sprinting = false;
-        }
+        if (Input.GetKey(KeyCode.LeftControl)) {Sprinting = true;}
+        if (!Input.GetKey(KeyCode.LeftControl) && Sprinting == true) {Sprinting = false;}
     }
 
     private void Dash()
@@ -200,10 +165,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            onGround = false;
-        }
+        if (collision.gameObject.CompareTag("Ground")) {onGround = false;}
 
         if (collision.gameObject.CompareTag("Jump_Wall") || collision.gameObject.CompareTag("Leftjump_Wall"))
         {

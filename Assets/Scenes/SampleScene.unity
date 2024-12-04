@@ -8998,7 +8998,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tutorial: {fileID: 1742488197}
-  Player: {fileID: 0}
+  Player: {fileID: 748465630}
 --- !u!4 &1681750211
 Transform:
   m_ObjectHideFlags: 0
