@@ -8,45 +8,44 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    float originalGravity;
-    public bool Dashing = false;
-    bool canDash = true;
-    bool dashJump = false;
-    string whatCooldown;
-    string dir;
-    public float DashPower;
+    [Header("Jumping")]
+    public float JumpHeight;
+    private bool isJumping;
 
-    [Header ("Player Movement")]
-    public int PlayerSpeed = 5;
+    [Header("Player Movement")]
+    public int WalkSpeed = 5;
     public int PlayerSprint = 8;
-    private bool Sprinting = false;
+    public float AccelerationRate;
+    public float DecelerationRate;
+    private float CurrentSpeed;
+    private float MaxPlayerSpeed;
     public PlayerController playerInputs;
 
-    [Header("Jumping Mechanics")]
-    public float jumpDash = 5f;
-    public float sprintJump = 6f;
-    public float JumpHeight = 10;
-    public float Coyotetime = 0.2f;
-    public float wallJumpHeight;
-    private float timeAfterJump;
-    public bool hasJumped = false;
-    public bool onGround = true;
-    private bool wallJump = false;
-
     [Header("Miscellaneous")]
-    [SerializeField] Rigidbody2D rb2d;
-    public SpriteRenderer spriteRender;
-    [SerializeField] public TrailRenderer TR;
-    AudioSource dashSound;
+    Rigidbody2D rb2d;
+    private string defineCooldown;
+    public Transform groundCheck;
+    public LayerMask defineGround;
+    private float originalGravityScale;
+    private bool Grounded() { return Physics2D.OverlapCircle(groundCheck.position, 0.35f, defineGround); }
     private Vector2 movement;
 
     private void Awake()
     {
-        onGround = true;
-        hasJumped = false;
-        dashSound = GetComponent<AudioSource>();
-        originalGravity = rb2d.gravityScale;
         playerInputs = new PlayerController();
+
+        playerInputs.Action.Jump.performed += jumping => Jumping(); // for future me if you want to implement Apex Hang Time, just change player movement speed for a brief period of time.
+        playerInputs.Action.Jump.canceled += jumpcancel => jumpCancel();
+
+        playerInputs.Action.Sprint.performed += sprinting => Sprinting();
+        playerInputs.Action.Sprint.canceled += sprintcancel => SprintCancel();
+    }
+
+    private void Start()
+    {
+        rb2d = GetComponent<Rigidbody2D>();
+        MaxPlayerSpeed = WalkSpeed;
+        originalGravityScale = rb2d.gravityScale;
     }
 
     private void OnEnable()
@@ -59,144 +58,78 @@ public class PlayerMovement : MonoBehaviour
         playerInputs.Disable();
     }
 
-    private void Start()
-    {
-        rb2d = GetComponent<Rigidbody2D>();
-        TR.emitting = false;
-    }
     private void Update()
     {
-        if (onGround != true) {timeAfterJump -= Time.deltaTime;}
-        else {timeAfterJump = Coyotetime;}
-        if (timeAfterJump < 0) {hasJumped = true;}
+        movement = playerInputs.Action.Movement.ReadValue<Vector2>(); // future me, fix the issue on input system. On keyboard, if you press W or S movement will stop entirely. Must investigate the Input System.
+        if (movement.x > 0) { movement.x = Mathf.Ceil(movement.x); } // for future me, the plan for omnidirectional dashing: store the value of "movement.x" in a seperate variable before rounding up.
+        else { movement.x = Mathf.FloorToInt(movement.x); }
+    }
 
-        movement = playerInputs.Action.Movement.ReadValue<Vector2>();
-        if (Dashing == false)
+    private void FixedUpdate()
+    {
+        // Check if player has collided with Ground Layer
+        if (Grounded() == true) { rb2d.gravityScale = originalGravityScale; isJumping = false; }
+        else if (Grounded() == false && isJumping == true && rb2d.velocity.y <= 0) { rb2d.gravityScale = originalGravityScale; }
+
+        Movement();
+    }
+
+    private void Movement()
+    {
+                if (movement.x != 0)
+                {
+                    CurrentSpeed += AccelerationRate * Time.fixedDeltaTime;
+                    CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, MaxPlayerSpeed);
+                    rb2d.velocity = new Vector2(movement.x * CurrentSpeed, rb2d.velocity.y);
+                }
+                else if (movement.x == 0)
+                {
+                    Debug.Log("Deceleration Speed: " + CurrentSpeed);
+                    CurrentSpeed -= DecelerationRate * Time.fixedDeltaTime;
+                    CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, MaxPlayerSpeed);
+                    rb2d.velocity = new Vector2(rb2d.velocity.x, rb2d.velocity.y);
+                    if(CurrentSpeed <= 0) { rb2d.velocity = new Vector2(0, rb2d.velocity.y); };
+                }
+    }
+
+    private void Jumping()
+    {
+        if (Grounded() == true)
         {
-            if (Sprinting == true) {transform.Translate(new Vector2(movement.x, movement.y) * Time.deltaTime * PlayerSprint);}
-            else {transform.Translate(new Vector2(movement.x, movement.y) * Time.deltaTime * PlayerSpeed);}
+            rb2d.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
+            isJumping = true;
+            rb2d.gravityScale = 2.4f;
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space) && hasJumped == false)
+    private void jumpCancel()
+    {
+        if (rb2d.velocity.y > 0f)
         {
-            Debug.Log("Jumped");
-            if (dashJump == true) { rb2d.AddForce(Vector2.up * jumpDash, ForceMode2D.Impulse);}
-            else if (Sprinting == true) { rb2d.AddForce(Vector2.up * sprintJump, ForceMode2D.Impulse);}
-            else if (wallJump == true){rb2d.AddForce(Vector2.up * wallJumpHeight, ForceMode2D.Impulse);}
-            else{rb2d.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);}
-            hasJumped = true;
+            rb2d.velocity = new Vector2(0, rb2d.velocity.y * 0.5f);
         }
+    }
 
-        if (canDash == true && Input.GetKeyDown(KeyCode.LeftShift))
+    private void Sprinting() { MaxPlayerSpeed = PlayerSprint; }
+    private void SprintCancel() { MaxPlayerSpeed = WalkSpeed; }
+
+
+    /*    private IEnumerator Cooldown(float time)
         {
-            if (Input.GetKey(KeyCode.D))
+            Debug.Log("if this runs cooldown IEnumerator is played");
+            switch (defineCooldown)
             {
-                dir = "right";
-                Dash();
+                case "apex":
+                    Debug.Log("cooldown is set to Apex and will soon begin cooldown");
+                    yield return new WaitForSeconds(time);
+                    Debug.Log("apex time applied");
+                    ApexApplied = true;
+                    rb2d.velocity = new Vector2(0, 0);
+                    break;
             }
-            else if (Input.GetKey(KeyCode.A))
-            {
-                dir = "left";
-                Dash();
-            }
-        }
+            defineCooldown = "";
+        }*/
 
-        if (Input.GetKey(KeyCode.LeftControl)) {Sprinting = true;}
-        if (!Input.GetKey(KeyCode.LeftControl) && Sprinting == true) {Sprinting = false;}
-    }
-
-    private void Dash()
-    {
-        dashSound.Play();
-        hasJumped = false;
-        onGround = true;
-        dashJump = true;
-        TR.emitting = true;
-        Dashing = true;
-        canDash = false;
-        whatCooldown = "dash";
-        rb2d.gravityScale = 0;
-        Debug.Log("gravity set to 0");
-        switch (dir)
-        {
-            case "left":
-                rb2d.velocity = new Vector2(-DashPower, 0);
-                break;
-            case "right":
-                rb2d.velocity = new Vector2(DashPower, 0);
-                break;
-        }
-        dir = "";
-        StartCoroutine(Cooldown());
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Vector2 impulse = new Vector2(-2, 0);
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Trap"))
-        {
-            onGround = true;
-            hasJumped = false;
-            TR.emitting = false;
-        }
-
-        if (Dashing == true && !collision.gameObject.CompareTag("Enemy"))
-        {
-            Dashing = false;
-            rb2d.gravityScale = originalGravity;
-        }
-
-        if (collision.gameObject.CompareTag("Jump_Wall") || collision.gameObject.CompareTag("Leftjump_Wall"))
-        {
-            onGround = true;
-            hasJumped = false;
-            wallJump = true;
-            if (collision.gameObject.CompareTag("Leftjump_Wall")) { rb2d.AddForce(-impulse, ForceMode2D.Impulse); }
-            else { rb2d.AddForce(impulse, ForceMode2D.Impulse); }
-        }
-
-        if (collision.gameObject.CompareTag("Trap") || collision.gameObject.CompareTag("Enemy") && Dashing == false)
-        {
-            spriteRender.color = Color.red;
-            whatCooldown = "hurtchange";
-            StartCoroutine(Cooldown());
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground")) {onGround = false;}
-
-        if (collision.gameObject.CompareTag("Jump_Wall") || collision.gameObject.CompareTag("Leftjump_Wall"))
-        {
-            onGround = true;
-            hasJumped = false;
-            wallJump = false;
-            rb2d.velocity = new Vector2(0,0);
-        }
-    }
-
-    IEnumerator Cooldown() // in hindsight this could've been an interface if i wasn't an idiot !!
-    {
-        switch (whatCooldown)
-        {
-            case "hurtchange":
-                yield return new WaitForSeconds(0.5f);
-                spriteRender.color = Color.yellow;
-                break;
-            case "dash":
-                yield return new WaitForSeconds(0.75f);
-                Debug.Log("gravity is set to normal");
-                // onGround = false; might completely remove this later.
-                Dashing = false;
-                dashJump = false;
-                rb2d.gravityScale = originalGravity;
-                rb2d.velocity = new Vector2(0, 0);
-                yield return new WaitForSeconds(1.5f);
-                canDash = true;
-                break;
-        }
-        whatCooldown = "";
-
-    }
 }
+
+

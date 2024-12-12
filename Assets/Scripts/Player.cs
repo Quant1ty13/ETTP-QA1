@@ -36,7 +36,7 @@ public class Player : PlayerStat, DmgCalc
         {
             EnemyAI enemy = collision.gameObject.GetComponent<EnemyAI>();
 
-            if (enemy != null && movementcheck.Dashing == false)
+            if (enemy != null/* && movementcheck.Dashing == false*/)
             {
                 enemyDamageCalc(enemy.Damage);
             }

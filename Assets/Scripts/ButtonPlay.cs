@@ -24,12 +24,12 @@ public class ButtonPlay : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the scene
     }
 
     public void ExitTutorial()
     {
-        Player.SetActive(true);
+        Player.SetActive(true); // sets player game object to true
         tutorial.SetActive(false);
     }
 }

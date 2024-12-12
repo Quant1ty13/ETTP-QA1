@@ -79,7 +79,7 @@ public class EnemyAI : EnemyStats
         Jumping = false;
         Grounded = true;
 
-        if (collision.gameObject.CompareTag("Player") && movementcheck.Dashing == true)
+        if (collision.gameObject.CompareTag("Player")/* && movementcheck.Dashing == true*/)
         {
             Destroy(gameObject);
         }
