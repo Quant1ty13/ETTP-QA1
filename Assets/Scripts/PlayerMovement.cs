@@ -25,9 +25,11 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb2d;
     private string defineCooldown;
     public Transform groundCheck;
+    Animator player_animation;
+    SpriteRenderer sr;
     public LayerMask defineGround;
     private float originalGravityScale;
-    private bool Grounded() { return Physics2D.OverlapCircle(groundCheck.position, 0.35f, defineGround); }
+    private bool Grounded() { return Physics2D.OverlapCircle(groundCheck.position, 0.2f, defineGround); }
     private Vector2 movement;
 
     private void Awake()
@@ -44,6 +46,8 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        player_animation = GetComponent<Animator>();
+        sr = GetComponent<SpriteRenderer>();
         MaxPlayerSpeed = WalkSpeed;
         originalGravityScale = rb2d.gravityScale;
     }
@@ -67,8 +71,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        player_animation.SetFloat("rigidbodyX_Velocity", Math.Abs(rb2d.velocity.x));
+        player_animation.SetFloat("rigidbodyY_Velocity", rb2d.velocity.y);
+
         // Check if player has collided with Ground Layer
-        if (Grounded() == true) { rb2d.gravityScale = originalGravityScale; isJumping = false; }
+        if (Grounded() == true) { rb2d.gravityScale = originalGravityScale; isJumping = false; player_animation.SetBool("isJumping", isJumping); }
         else if (Grounded() == false && isJumping == true && rb2d.velocity.y <= 0) { rb2d.gravityScale = originalGravityScale; }
 
         Movement();
@@ -76,22 +83,25 @@ public class PlayerMovement : MonoBehaviour
 
     private void Movement()
     {
-                if (movement.x != 0)
-                {
-                    CurrentSpeed += AccelerationRate * Time.fixedDeltaTime;
-                    CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, MaxPlayerSpeed);
-                    rb2d.velocity = new Vector2(movement.x * CurrentSpeed, rb2d.velocity.y);
-                }
-                else if (movement.x == 0)
-                {
-                    Debug.Log("Deceleration Speed: " + CurrentSpeed);
-                    CurrentSpeed -= DecelerationRate * Time.fixedDeltaTime;
-                    CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, MaxPlayerSpeed);
-                    rb2d.velocity = new Vector2(rb2d.velocity.x, rb2d.velocity.y);
-                    if(CurrentSpeed <= 0) { rb2d.velocity = new Vector2(0, rb2d.velocity.y); };
-                }
-    }
+        if (movement.x != 0)
+        {
+            CurrentSpeed += AccelerationRate * Time.fixedDeltaTime;
+            CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, MaxPlayerSpeed);
+            rb2d.velocity = new Vector2(movement.x * CurrentSpeed, rb2d.velocity.y);
+        }
+        else if (movement.x == 0)
+        {
+            Debug.Log("Deceleration Speed: " + CurrentSpeed);
+            CurrentSpeed -= DecelerationRate * Time.fixedDeltaTime;
+            CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, MaxPlayerSpeed);
+            rb2d.velocity = new Vector2(rb2d.velocity.x, rb2d.velocity.y);
+            if (CurrentSpeed <= 0) { rb2d.velocity = new Vector2(0, rb2d.velocity.y); };
+        }
 
+
+        Turn();
+    }
+    // ToDo Tomorrow: make sure to fine-tune the movement (everything should be okay, just adjust the movement settings and research a bit more on movement) before adding wall climbing and dashing.
     private void Jumping()
     {
         if (Grounded() == true)
@@ -99,6 +109,7 @@ public class PlayerMovement : MonoBehaviour
             rb2d.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
             isJumping = true;
             rb2d.gravityScale = 2.4f;
+            player_animation.SetBool("isJumping", isJumping);
         }
     }
 
@@ -110,6 +121,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void Turn()
+    {
+        if (movement.x > 0)
+        {
+            sr.flipX = false;
+        }
+        else if (movement.x < 0)
+        {
+            sr.flipX = true;
+        }
+    }
     private void Sprinting() { MaxPlayerSpeed = PlayerSprint; }
     private void SprintCancel() { MaxPlayerSpeed = WalkSpeed; }
 
