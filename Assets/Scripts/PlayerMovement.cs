@@ -10,11 +10,14 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Jumping")]
     public float JumpHeight;
+    public float JumpBufferTime;
     private bool isJumping;
+    private float TimeSinceJump;
+    private float TimeHoldingJump;
 
     [Header("Player Movement")]
-    public int WalkSpeed = 5;
-    public int PlayerSprint = 8;
+    public int WalkSpeed;
+    public int PlayerSprint;
     public float AccelerationRate;
     public float DecelerationRate;
     private float CurrentSpeed;
@@ -75,7 +78,12 @@ public class PlayerMovement : MonoBehaviour
         player_animation.SetFloat("rigidbodyY_Velocity", rb2d.velocity.y);
 
         // Check if player has collided with Ground Layer
-        if (Grounded() == true) { rb2d.gravityScale = originalGravityScale; isJumping = false; player_animation.SetBool("isJumping", isJumping); }
+        if (Grounded() == true) 
+        { 
+            rb2d.gravityScale = originalGravityScale; 
+            isJumping = false; 
+            player_animation.SetBool("isJumping", isJumping); 
+        }
         else if (Grounded() == false && isJumping == true && rb2d.velocity.y <= 0) { rb2d.gravityScale = originalGravityScale; }
 
         Movement();
@@ -101,7 +109,6 @@ public class PlayerMovement : MonoBehaviour
 
         Turn();
     }
-    // ToDo Tomorrow: make sure to fine-tune the movement (everything should be okay, just adjust the movement settings and research a bit more on movement) before adding wall climbing and dashing.
     private void Jumping()
     {
         if (Grounded() == true)
@@ -111,10 +118,17 @@ public class PlayerMovement : MonoBehaviour
             rb2d.gravityScale = 2.4f;
             player_animation.SetBool("isJumping", isJumping);
         }
+        else
+        {
+            // Time how long the player holds the jump button
+
+            // Set a timer that counts down until the player hits the ground
+        }
     }
 
     private void jumpCancel()
     {
+        // revise this if else statement to accomodate for jump buffering.
         if (rb2d.velocity.y > 0f)
         {
             rb2d.velocity = new Vector2(0, rb2d.velocity.y * 0.5f);
@@ -123,15 +137,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void Turn()
     {
-        if (movement.x > 0)
-        {
-            sr.flipX = false;
-        }
-        else if (movement.x < 0)
-        {
-            sr.flipX = true;
-        }
+        if (movement.x > 0) { sr.flipX = false; }
+        else if (movement.x < 0) { sr.flipX = true; }
     }
+
     private void Sprinting() { MaxPlayerSpeed = PlayerSprint; }
     private void SprintCancel() { MaxPlayerSpeed = WalkSpeed; }
 
