@@ -11,9 +11,13 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jumping")]
     public float JumpHeight;
     public float JumpBufferTime;
+    public float CoyoteTime;
+    private bool canJump;
     private bool isJumping;
+    private float CoyoteTimeCounter;
     private float TimeSinceJump;
     private float TimeHoldingJump;
+    private bool EnableJumpBuffer;
 
     [Header("Player Movement")]
     public int WalkSpeed;
@@ -78,13 +82,31 @@ public class PlayerMovement : MonoBehaviour
         player_animation.SetFloat("rigidbodyY_Velocity", rb2d.velocity.y);
 
         // Check if player has collided with Ground Layer
-        if (Grounded() == true) 
-        { 
-            rb2d.gravityScale = originalGravityScale; 
-            isJumping = false; 
-            player_animation.SetBool("isJumping", isJumping); 
+        if (Grounded() == true)
+        {
+            CoyoteTimeCounter = CoyoteTime;
+            rb2d.gravityScale = originalGravityScale;
+            canJump = !isJumping;
+            isJumping = false;
+            // Check for TimeSinceJump <= JumpBufferTime before setting Jump Buffer to false
+            if (TimeSinceJump <= JumpBufferTime && EnableJumpBuffer == true)
+            {
+                JumpBufferHandler(); // future me, i dont trust myself right now no way i first tried this code. When you go back to that project, HEAVILY test the code out, look out for any bugs before implementing wall climbing.
+            }
+            EnableJumpBuffer = false;
+            player_animation.SetBool("isJumping", isJumping);
         }
-        else if (Grounded() == false && isJumping == true && rb2d.velocity.y <= 0) { rb2d.gravityScale = originalGravityScale; }
+        else if (Grounded() == false && canJump == true)
+        {
+            Debug.Log("Coyote Time Count: " + CoyoteTimeCounter);
+            CoyoteTimeCounter -= Time.fixedDeltaTime;
+        }
+        else if (Grounded() == false && EnableJumpBuffer == true)
+        {
+            TimeSinceJump += Time.fixedDeltaTime;
+            //Debug.Log("Time since Jump: " + TimeSinceJump);
+        }
+
 
         Movement();
     }
@@ -99,7 +121,6 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (movement.x == 0)
         {
-            Debug.Log("Deceleration Speed: " + CurrentSpeed);
             CurrentSpeed -= DecelerationRate * Time.fixedDeltaTime;
             CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, MaxPlayerSpeed);
             rb2d.velocity = new Vector2(rb2d.velocity.x, rb2d.velocity.y);
@@ -111,19 +132,39 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Jumping()
     {
-        if (Grounded() == true)
+        if (Grounded() == true && canJump == true || Grounded() == false && isJumping == false && CoyoteTimeCounter > 0 && canJump == true)
         {
+            Debug.Log("jumping!");
+            TimeSinceJump = 0;
             rb2d.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
+            canJump = false;
             isJumping = true;
-            rb2d.gravityScale = 2.4f;
             player_animation.SetBool("isJumping", isJumping);
         }
-        else
+        else if (Grounded() == false && canJump == false)
         {
             // Time how long the player holds the jump button
+            TimeHoldingJump = 0.5f;
+            Debug.Log("counting how long the player holds jump button: " + TimeHoldingJump);
 
             // Set a timer that counts down until the player hits the ground
+            EnableJumpBuffer = true;
         }
+    }
+
+    private void JumpBufferHandler()
+    {
+        Debug.Log("resetting TimeSinceJump");
+        TimeSinceJump = 0;
+        // Do Jumping() for as long until TimeHoldingJump = 0, if it reaches 0, do jumpCancel()
+        if (TimeHoldingJump > 0)
+        {
+            Debug.Log("activating jump buffer");
+            TimeHoldingJump -= Time.fixedDeltaTime;
+            Jumping();
+        }
+
+        if(TimeHoldingJump <= 0) { jumpCancel(); }
     }
 
     private void jumpCancel()
@@ -131,6 +172,7 @@ public class PlayerMovement : MonoBehaviour
         // revise this if else statement to accomodate for jump buffering.
         if (rb2d.velocity.y > 0f)
         {
+            TimeHoldingJump = 0;
             rb2d.velocity = new Vector2(0, rb2d.velocity.y * 0.5f);
         }
     }

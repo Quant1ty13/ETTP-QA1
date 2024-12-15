@@ -2992,8 +2992,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3973e995a9e9034c89054a14e5c5519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  JumpHeight: 13.8
-  JumpBufferTime: 0
+  JumpHeight: 13.6
+  JumpBufferTime: 0.15
+  CoyoteTime: 0.1
   WalkSpeed: 9
   PlayerSprint: 12
   AccelerationRate: 60
