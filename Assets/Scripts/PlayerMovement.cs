@@ -106,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
             TimeSinceJump += Time.fixedDeltaTime;
             //Debug.Log("Time since Jump: " + TimeSinceJump);
         }
+        else if(Grounded() == false && rb2d.velocity.y < 0) { rb2d.gravityScale = 5.5f; }
 
 
         Movement();

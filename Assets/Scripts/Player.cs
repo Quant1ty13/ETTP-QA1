@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : PlayerStat, DmgCalc
 {
@@ -40,6 +41,10 @@ public class Player : PlayerStat, DmgCalc
             {
                 enemyDamageCalc(enemy.Damage);
             }
+        }
+        if (collision.gameObject.CompareTag("Reset"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the scene
         }
 
         if (collision.gameObject.CompareTag("Win"))

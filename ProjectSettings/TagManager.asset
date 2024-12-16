@@ -11,6 +11,7 @@ TagManager:
   - Leftjump_Wall
   - Win
   - Tutorial
+  - Reset
   layers:
   - Default
   - TransparentFX
