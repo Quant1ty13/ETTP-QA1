@@ -98,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (Grounded() == false && canJump == true)
         {
-            Debug.Log("Coyote Time Count: " + CoyoteTimeCounter);
+            //Debug.Log("Coyote Time Count: " + CoyoteTimeCounter);
             CoyoteTimeCounter -= Time.fixedDeltaTime;
         }
         else if (Grounded() == false && EnableJumpBuffer == true)
@@ -146,7 +146,7 @@ public class PlayerMovement : MonoBehaviour
         {
             // Time how long the player holds the jump button
             TimeHoldingJump = 0.5f;
-            Debug.Log("counting how long the player holds jump button: " + TimeHoldingJump);
+            //Debug.Log("counting how long the player holds jump button: " + TimeHoldingJump);
 
             // Set a timer that counts down until the player hits the ground
             EnableJumpBuffer = true;
@@ -160,7 +160,7 @@ public class PlayerMovement : MonoBehaviour
         // Do Jumping() for as long until TimeHoldingJump = 0, if it reaches 0, do jumpCancel()
         if (TimeHoldingJump > 0)
         {
-            Debug.Log("activating jump buffer");
+            //Debug.Log("activating jump buffer");
             TimeHoldingJump -= Time.fixedDeltaTime;
             Jumping();
         }

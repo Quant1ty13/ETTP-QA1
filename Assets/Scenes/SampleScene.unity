@@ -2143,7 +2143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   JumpHeight: 16.4
-  JumpBufferTime: 0.15
+  JumpBufferTime: 0.18
   CoyoteTime: 0.1
   WalkSpeed: 9
   PlayerSprint: 12
@@ -4674,8 +4674,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.35, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.35, y: 1.35, z: 1.35}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 748465633}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
