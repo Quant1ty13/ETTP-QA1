@@ -20,6 +20,11 @@ public class Player : PlayerStat, DmgCalc
             Destroy(gameObject);
             GameOver.SetActive(true);
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene(0);
+        }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
