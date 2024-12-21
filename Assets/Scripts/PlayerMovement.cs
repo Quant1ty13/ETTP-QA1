@@ -12,12 +12,14 @@ public class PlayerMovement : MonoBehaviour
     public float JumpHeight;
     public float JumpBufferTime;
     public float CoyoteTime;
+    public float ApexHangTime;
     private bool canJump;
     private bool isJumping;
     private float CoyoteTimeCounter;
     private float TimeSinceJump;
     private float TimeHoldingJump;
     private bool EnableJumpBuffer;
+    private float ApexHangCounter;
 
     [Header("Player Movement")]
     public int WalkSpeed;
@@ -84,6 +86,7 @@ public class PlayerMovement : MonoBehaviour
         // Check if player has collided with Ground Layer
         if (Grounded() == true)
         {
+            ApexHangCounter = ApexHangTime;
             CoyoteTimeCounter = CoyoteTime;
             rb2d.gravityScale = originalGravityScale;
             canJump = !isJumping;
@@ -98,15 +101,18 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (Grounded() == false && canJump == true)
         {
-            //Debug.Log("Coyote Time Count: " + CoyoteTimeCounter);
             CoyoteTimeCounter -= Time.fixedDeltaTime;
         }
         else if (Grounded() == false && EnableJumpBuffer == true)
         {
             TimeSinceJump += Time.fixedDeltaTime;
-            //Debug.Log("Time since Jump: " + TimeSinceJump);
         }
-        else if(Grounded() == false && rb2d.velocity.y < 0) { rb2d.gravityScale = 5.5f; }
+        else if(Grounded() == false && rb2d.velocity.y < 0) 
+        { 
+            ApexHangCounter -= Time.fixedDeltaTime;
+            if (ApexHangCounter < 0) { rb2d.gravityScale = 5.5f; }
+            else if (ApexHangCounter > 0){ rb2d.gravityScale = 1.25f; }
+        }
 
 
         Movement();
@@ -146,7 +152,6 @@ public class PlayerMovement : MonoBehaviour
         {
             // Time how long the player holds the jump button
             TimeHoldingJump = 0.5f;
-            //Debug.Log("counting how long the player holds jump button: " + TimeHoldingJump);
 
             // Set a timer that counts down until the player hits the ground
             EnableJumpBuffer = true;
