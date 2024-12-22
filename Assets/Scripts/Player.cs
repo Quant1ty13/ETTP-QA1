@@ -13,6 +13,14 @@ public class Player : PlayerStat, DmgCalc
     [SerializeField] private GameObject player;
 
     bool TutorialWatched = false;
+    public AudioSource music;
+
+    private void Start()
+    {
+        // Instantiating audio values
+        music = GameObject.Find("BackgroundMusic").GetComponent<AudioSource>();
+        music.volume = PlayerPrefs.GetFloat("MusicVolume");
+    }
     private void Update()
     {
         if (playerHealth <= 0)

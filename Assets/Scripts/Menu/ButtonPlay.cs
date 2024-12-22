@@ -33,7 +33,7 @@ public class ButtonPlay : MonoBehaviour
     // Buttons for Main Menu
     public void Play()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene(4);
     }
 
     public void Exit()
