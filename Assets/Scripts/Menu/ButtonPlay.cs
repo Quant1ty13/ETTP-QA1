@@ -8,10 +8,6 @@ public class ButtonPlay : MonoBehaviour
     [SerializeField] GameObject tutorial;
     [SerializeField] GameObject Player;
 
-    [Header("Main Menu Variables")]
-    [SerializeField] GameObject M_Menu;
-    [SerializeField] GameObject M_Settings;
-    [SerializeField] GameObject M_LevelSelect;
 
     public void MainMenu()
     {
@@ -27,41 +23,5 @@ public class ButtonPlay : MonoBehaviour
     {
         Player.SetActive(true); // sets player game object to true
         tutorial.SetActive(false);
-    }
-
-
-    // Buttons for Main Menu
-    public void Play()
-    {
-        SceneManager.LoadScene(4);
-    }
-
-    public void Exit()
-    {
-        Application.Quit();
-    }
-
-    public void Settings_Main()
-    {
-        M_Menu.SetActive(false);
-        M_Settings.SetActive(true);
-    }
-
-    public void DisableSettings_Main()
-    {
-        M_Menu.SetActive(true);
-        M_Settings.SetActive(false);
-    }
-
-    public void LevelSelect()
-    {
-        M_Menu.SetActive(false);
-        M_LevelSelect.SetActive(true);
-    }
-
-    public void DisableLevelSelect()
-    {
-        M_Menu.SetActive(true);
-        M_LevelSelect.SetActive(false);
     }
 }
