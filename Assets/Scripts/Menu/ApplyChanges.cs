@@ -22,7 +22,13 @@ public class ApplyChanges : MonoBehaviour
     public Slider musicSlider;
     public float musicvolume;
 
+    // Sound Effects
+    public AudioSource soundfxManager;
+    public Slider soundfxSlider;
+    public float soundfxvolume;
+
     public void SetMusicVolume(float volume) { musicvolume = volume; }
+    public void SetSFXVolume (float volume) { soundfxvolume = volume; }
     public void SetResolution(int resolutionIndex) { Resolution resolution = filteredResolutions[resolutionIndex]; resolutionchange = resolution; }
     public void SetFullScreen(bool fs) { FullScreen = fs; }
 
@@ -33,12 +39,17 @@ public class ApplyChanges : MonoBehaviour
     private void Start()
     {
         music = GameObject.Find("BackgroundMusic").GetComponent<AudioSource>();
+        soundfxManager = GameObject.Find("SoundFx Manager").GetComponent<AudioSource>();
 
         // Resetting values
         music.volume = 1;
         musicSlider.value = 1;
+        soundfxManager.volume = 1;
+        soundfxSlider.value = 1;
         music.volume = PlayerPrefs.GetFloat("MusicVolume");
         musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
+        soundfxManager.volume = PlayerPrefs.GetFloat("SoundFXVolume");
+        soundfxSlider.value = PlayerPrefs.GetFloat("SoundFXVolume");
         checkbox.isOn = FullScreen;
 
         // Resolution Size
@@ -83,7 +94,9 @@ public class ApplyChanges : MonoBehaviour
     public void ApplyChange()
     {
         PlayerPrefs.SetFloat("MusicVolume", musicvolume);
+        PlayerPrefs.SetFloat("SoundFXVolume", soundfxvolume);
         music.volume = PlayerPrefs.GetFloat("MusicVolume");
+        soundfxManager.volume = PlayerPrefs.GetFloat("SoundFXVolume");
         Screen.SetResolution(resolutionchange.width, resolutionchange.height, FullScreen);
     }
 }

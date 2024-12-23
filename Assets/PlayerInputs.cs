@@ -71,6 +71,15 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""90ffaeb1-76a8-431b-a582-09526a40fa9c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -238,6 +247,28 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fb0485bf-f4da-4bbc-b322-2289a9e72615"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1901c918-9c16-45a3-884a-8c60c1c58906"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -262,6 +293,7 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         m_Action_Climbing = m_Action.FindAction("Climbing", throwIfNotFound: true);
         m_Action_Sprint = m_Action.FindAction("Sprint", throwIfNotFound: true);
         m_Action_Dash = m_Action.FindAction("Dash", throwIfNotFound: true);
+        m_Action_Pause = m_Action.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -328,6 +360,7 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
     private readonly InputAction m_Action_Climbing;
     private readonly InputAction m_Action_Sprint;
     private readonly InputAction m_Action_Dash;
+    private readonly InputAction m_Action_Pause;
     public struct ActionActions
     {
         private @PlayerController m_Wrapper;
@@ -337,6 +370,7 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         public InputAction @Climbing => m_Wrapper.m_Action_Climbing;
         public InputAction @Sprint => m_Wrapper.m_Action_Sprint;
         public InputAction @Dash => m_Wrapper.m_Action_Dash;
+        public InputAction @Pause => m_Wrapper.m_Action_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Action; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -361,6 +395,9 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IActionActions instance)
@@ -380,6 +417,9 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IActionActions instance)
@@ -422,5 +462,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         void OnClimbing(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }
