@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class SoundFX : MonoBehaviour
 {
-    // For future me, make this work with both Click and Hover Sound FX, furthermore make this work with the SoundFX slider.
     [SerializeField] private AudioSource soundfxManager;
     private float randomizedpitch;
 

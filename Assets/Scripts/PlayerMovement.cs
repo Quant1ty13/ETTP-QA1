@@ -41,6 +41,10 @@ public class PlayerMovement : MonoBehaviour
     private bool Grounded() { return Physics2D.OverlapCircle(groundCheck.position, 0.2f, defineGround); }
     private Vector2 movement;
 
+    // Sound Effect Variables
+    public SoundFX soundfxManager;
+    public AudioClip jump;
+
     private void Awake()
     {
         playerInputs = new PlayerController();
@@ -143,6 +147,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("jumping!");
             TimeSinceJump = 0;
+            soundfxManager.PlaySFX(jump, true);
             rb2d.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
             canJump = false;
             isJumping = true;
