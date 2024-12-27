@@ -28,6 +28,11 @@ public class PlayerHandler : PlayerStat
     public int PlayerSprint;
     public float AccelerationRate;
     public float DecelerationRate;
+    public float DashSpeed;
+    public float DashTime;
+    public bool dashActivate { get; private set; }
+    public bool isDashing { get; private set; }
+    public float dashCounter { get; private set; }
     private float currentSpeed;
     private float maxPlayerSpeed;
     public PlayerController playerInputs;
@@ -65,6 +70,11 @@ public class PlayerHandler : PlayerStat
     public Vector2 Movement { get { return movement; } }
     public float CurrentSpeed { get { return currentSpeed; } set { currentSpeed = value; } }
     public float MaxPlayerSpeed { get { return maxPlayerSpeed; } set { maxPlayerSpeed = value; } }
+
+    // Dashing
+    public bool DashActivate { get { return dashActivate; } set { dashActivate = value; } }
+    public bool IsDashing { get { return isDashing; } set {  isDashing = value; } }
+    public float DashCounter { get { return dashCounter; } set { dashCounter = value; } }
     #endregion
 
     private void Awake()
@@ -72,6 +82,7 @@ public class PlayerHandler : PlayerStat
         playerInputs = new PlayerController();
 
         playerInputs.Action.Pause.performed += enablepause => EnablePauseMenu();
+        playerInputs.Action.Dash.performed += dash_performed => DashPerformed();
 
         playerInputs.Action.Jump.started += jumpactivating => activeJump();
         playerInputs.Action.Jump.performed += jumpactivate => activeJump();
@@ -177,4 +188,5 @@ public class PlayerHandler : PlayerStat
     private void activeJump() { jumpActivate = true; }
     private void Sprinting() { MaxPlayerSpeed = PlayerSprint; }
     private void SprintCancel() { MaxPlayerSpeed = WalkSpeed; }
+    private void DashPerformed() { dashActivate = true; }
 }

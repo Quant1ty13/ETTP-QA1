@@ -7,7 +7,7 @@ public class Moving : BaseState
     public Moving(PlayerHandler currentContext, StatesHandler stateHandler) : base(currentContext, stateHandler) { }
     public override void EnterState()
     {
-
+        Debug.Log("enterring moving state");
     }
     public override void UpdateState()
     {
@@ -33,6 +33,13 @@ public class Moving : BaseState
         if (Context.Movement.x == 0)
         {
             SwitchState(StateHandler.Idle());
+        }
+        else { }
+
+        if (Context.DashActivate == true)
+        {
+            Debug.Log("switching to dashing state from a substate from Moving");
+            SwitchState(StateHandler.Dashing());
         }
     }
 

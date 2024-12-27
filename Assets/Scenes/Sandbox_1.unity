@@ -16525,12 +16525,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1672255092645537949}
     - target: {fileID: 8303270363543578345, guid: e2acbbeeee960f749b8dc87b0535f230, type: 3}
+      propertyPath: DashTime
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 8303270363543578345, guid: e2acbbeeee960f749b8dc87b0535f230, type: 3}
       propertyPath: GameOver
       value: 
       objectReference: {fileID: 695917469}
     - target: {fileID: 8303270363543578345, guid: e2acbbeeee960f749b8dc87b0535f230, type: 3}
       propertyPath: Tutorial
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8303270363543578345, guid: e2acbbeeee960f749b8dc87b0535f230, type: 3}
+      propertyPath: DashSpeed
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 8303270363543578345, guid: e2acbbeeee960f749b8dc87b0535f230, type: 3}
       propertyPath: PauseMenu

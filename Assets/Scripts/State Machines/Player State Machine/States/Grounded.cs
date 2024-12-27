@@ -68,13 +68,19 @@ public class Grounded : BaseState
 
     public override void InitializeSubState()
     {
-        if (Context.Movement.x == 0)
+
+        if (Context.Movement.x == 0 && Context.DashActivate == false)
         {
             SetSubState(StateHandler.Idle());
         }
-        else if (Context.Movement.x != 0)
+        else if (Context.Movement.x != 0 && Context.DashActivate == false)
         {
             SetSubState(StateHandler.Moving());
+        }
+        else if (Context.DashActivate == true)
+        {
+            Debug.Log("switching to dashing state from a root state");
+            SetSubState(StateHandler.Dashing());
         }
     }
 }

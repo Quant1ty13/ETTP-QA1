@@ -10,7 +10,7 @@ public class Idle : BaseState
 
     public override void EnterState()
     {
-
+        Debug.Log("hi from the idle state");
     }
     public override void UpdateState()
     {
@@ -38,6 +38,13 @@ public class Idle : BaseState
         if (Context.Movement.x != 0)
         {
             SwitchState(StateHandler.Moving());
+        }
+        else { }
+
+        if (Context.DashActivate == true)
+        {
+            Debug.Log("switching to dashing state from a substate from Idle");
+            SwitchState(StateHandler.Dashing());
         }
     }
 

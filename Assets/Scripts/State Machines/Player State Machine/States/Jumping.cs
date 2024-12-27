@@ -43,6 +43,11 @@ public class Jumping : BaseState
         {
             SetSubState(StateHandler.Moving());
         }
+        else if (Context.DashActivate == true)
+        {
+            Debug.Log("switching to dashing state from a root state");
+            SetSubState(StateHandler.Dashing());
+        }
     }
 
     public void DoJump()

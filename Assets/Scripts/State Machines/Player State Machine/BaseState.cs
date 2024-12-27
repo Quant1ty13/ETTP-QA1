@@ -51,6 +51,7 @@ public abstract class BaseState
     {
         ExitState();
 
+        Debug.Log("what is new state?: " + newState);
         newState.EnterState();
 
         if (isRootState == true)

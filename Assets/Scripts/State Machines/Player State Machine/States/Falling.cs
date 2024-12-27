@@ -22,9 +22,8 @@ public class Falling : BaseState
         // Do the second half of Apex Hang logic
         if (Context.IsJumping == true)
         {
-            Debug.Log("Apex Hang Counter: " + Context.ApexHangCounter);
             Context.ApexHangCounter -= Time.fixedDeltaTime;
-            if (Context.ApexHangCounter < 0) { Context.rb2d.gravityScale = 5.6f; Debug.Log("Apex Hang Counter: " + Context.ApexHangCounter + ", will now be set to 5.6f"); }
+            if (Context.ApexHangCounter < 0) { Context.rb2d.gravityScale = 5.6f; }
             else { }
         }
         else { }
@@ -64,6 +63,11 @@ public class Falling : BaseState
         else if (Context.Movement.x != 0)
         {
             SetSubState(StateHandler.Moving());
+        }
+        else if (Context.DashActivate == true)
+        {
+            Debug.Log("switching to dashing state from a root state");
+            SetSubState(StateHandler.Dashing());
         }
     }
 }
