@@ -61,6 +61,6 @@ public class Moving : BaseState
     private void Accelerate()
     {
         Context.CurrentSpeed += Context.AccelerationRate * Time.fixedDeltaTime;
-        Context.CurrentSpeed = Mathf.Clamp(Context.CurrentSpeed, 0, Context.MaxPlayerSpeed);
+        Context.CurrentSpeed = Mathf.Clamp(Context.CurrentSpeed, 0, Context.MaxPlayerSpeed + Context.BonusSpeedCounter);
     }
 }

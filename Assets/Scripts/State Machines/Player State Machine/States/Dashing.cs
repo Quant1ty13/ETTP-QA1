@@ -57,13 +57,19 @@ public class Dashing : BaseState
     private void Dash()
     {
         // Dash functionality here (make sure the player has an extra jump during the dash)
+        Context.soundfxManager.PlaySFX(Context.dash, true);
+
         if (Context.sr.flipX == false)
         {
             Context.rb2d.velocity = new Vector2(Context.DashSpeed, 0);
+            Context.dashParticle.transform.localScale = new Vector3(-1.75f, -1.75f, -1.75f);
+            Context.dashParticle.Play();
         }
         else
         {
             Context.rb2d.velocity = new Vector2(-Context.DashSpeed, 0);
+            Context.dashParticle.transform.localScale = new Vector3(1.75f, 1.75f, 1.75f);
+            Context.dashParticle.Play();
         };
     }
 }

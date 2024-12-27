@@ -31,14 +31,29 @@ public class PlayerHandler : PlayerStat
     public float DashSpeed;
     public float DashTime;
     public float BonusHeight_Dash;
+    public float BonusSpeed_Dash;
+    public float BonusSpeedTime;
     public bool dashActivate { get; private set; }
     public bool isDashing { get; private set; }
     public float dashCounter { get; private set; }
     public float bonusHeightCounter { get; private set; }
     public bool hasDashed { get; private set; }
+    public float bonusSpeedCounter { get; private set; }
     private float currentSpeed;
     private float maxPlayerSpeed;
     public PlayerController playerInputs;
+
+    [Header("Particle Effects")]
+    public ParticleSystem dashParticle;
+
+    [Header("Audio Variables")]
+    // Sound Effect Variables
+    public SoundFX soundfxManager;
+    public AudioClip jump;
+    public AudioClip dash;
+    [SerializeField] private GameObject PauseMenu;
+    public AudioSource music;
+    private bool PauseMenuOn;
 
     [Header("Miscellaneous")]
     public Rigidbody2D rb2d;
@@ -50,13 +65,6 @@ public class PlayerHandler : PlayerStat
     public float originalGravityScale;
     public bool onGround() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineGround); }
     private Vector2 movement;
-
-    // Sound Effect Variables
-    public SoundFX soundfxManager;
-    public AudioClip jump;
-    [SerializeField] private GameObject PauseMenu;
-    public AudioSource music;
-    private bool PauseMenuOn;
 
     #region State Variables
     BaseState currentState;
@@ -77,9 +85,10 @@ public class PlayerHandler : PlayerStat
 
     // Dashing
     public bool DashActivate { get { return dashActivate; } set { dashActivate = value; } }
-    public bool IsDashing { get { return isDashing; } set {  isDashing = value; } }
+    public bool IsDashing { get { return isDashing; } set { isDashing = value; } }
     public float DashCounter { get { return dashCounter; } set { dashCounter = value; } }
     public bool HasDashed { get { return hasDashed; } set { hasDashed = value; } }
+    public float BonusSpeedCounter { get { return bonusSpeedCounter; } set { bonusSpeedCounter = value; } }
     #endregion
 
     private void Awake()
@@ -103,6 +112,8 @@ public class PlayerHandler : PlayerStat
     }
     private void Start()
     {
+
+
         music = GameObject.Find("BackgroundMusic").GetComponent<AudioSource>();
         music.volume = PlayerPrefs.GetFloat("MusicVolume");
 
@@ -138,7 +149,7 @@ public class PlayerHandler : PlayerStat
 
     private void FixedUpdate()
     {
-        currentState.FixedUpdateStates(); 
+        currentState.FixedUpdateStates();
     }
 
 
@@ -195,4 +206,14 @@ public class PlayerHandler : PlayerStat
     private void Sprinting() { MaxPlayerSpeed = PlayerSprint; }
     private void SprintCancel() { MaxPlayerSpeed = WalkSpeed; }
     private void DashPerformed() { dashActivate = true; }
+
+    public void StartCountdown() { StartCoroutine(Cooldown()); }
+
+    private IEnumerator Cooldown()
+    {
+        Debug.Log("starting countdown to set bonus speed to 0");
+        yield return new WaitForSeconds(BonusSpeedTime);
+        bonusSpeedCounter = 0;
+        Debug.Log("bonus speed set to 0");
+    }
 }

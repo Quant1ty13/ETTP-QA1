@@ -24,6 +24,9 @@ public class RootDash : BaseState
 
     public override void ExitState()
     {
+        Context.BonusSpeedCounter = Context.BonusSpeed_Dash;
+        Context.StartCountdown();
+        Context.dashParticle.Stop();
         Context.HasDashed = true;
         Context.rb2d.velocity = new Vector2(0, 0);
         Debug.Log("exit state is running");
