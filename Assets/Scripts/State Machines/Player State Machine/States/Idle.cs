@@ -41,10 +41,14 @@ public class Idle : BaseState
         }
         else { }
 
-        if (Context.DashActivate == true)
+        if (Context.DashActivate == true && Context.HasDashed == false)
         {
             Debug.Log("switching to dashing state from a substate from Idle");
             SwitchState(StateHandler.Dashing());
+        }
+        else if (Context.DashActivate == true && Context.HasDashed == true)
+        {
+            Context.DashActivate = false;
         }
     }
 

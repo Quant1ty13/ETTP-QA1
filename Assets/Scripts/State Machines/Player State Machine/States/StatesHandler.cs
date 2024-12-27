@@ -17,4 +17,5 @@ public class StatesHandler
     public BaseState Jumping() { return new Jumping(context, this); }
     public BaseState Moving() { return new Moving(context, this); }
     public BaseState Dashing() { return new Dashing(context, this); }
+    public BaseState RootDash() { return new RootDash(context, this); }
 }

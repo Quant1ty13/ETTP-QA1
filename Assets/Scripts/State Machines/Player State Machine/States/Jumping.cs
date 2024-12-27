@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class Jumping : BaseState
 {
@@ -31,6 +32,15 @@ public class Jumping : BaseState
         {
             SwitchState(StateHandler.Falling());
         }
+        else if (Context.DashActivate == true && Context.HasDashed == false)
+        {
+            Debug.Log("switching to dashing state from a root state");
+            SwitchState(StateHandler.RootDash());
+        }
+        else if (Context.DashActivate == true && Context.HasDashed == true)
+        {
+            Context.DashActivate = false;
+        }
     }
 
     public override void InitializeSubState()
@@ -43,11 +53,11 @@ public class Jumping : BaseState
         {
             SetSubState(StateHandler.Moving());
         }
-        else if (Context.DashActivate == true)
+/*        else if (Context.DashActivate == true)
         {
             Debug.Log("switching to dashing state from a root state");
             SetSubState(StateHandler.Dashing());
-        }
+        }*/
     }
 
     public void DoJump()
@@ -59,8 +69,8 @@ public class Jumping : BaseState
         Context.JumpActivate = true;
         Context.TimeSinceJump = 0;
         Context.soundfxManager.PlaySFX(Context.jump, true);
-        Context.rb2d.AddForce(Vector2.up * Context.JumpHeight, ForceMode2D.Impulse);
-        Context.CanJump = false;
+        Context.rb2d.AddForce(Vector2.up * (Context.JumpHeight + Context.BonusHeightCounter), ForceMode2D.Impulse);
+        Context.BonusHeightCounter = 0;
         Context.IsJumping = true;
     }
 }

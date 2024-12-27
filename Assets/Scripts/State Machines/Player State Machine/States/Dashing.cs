@@ -35,8 +35,7 @@ public class Dashing : BaseState
 
     public override void ExitState()
     {
-        Context.rb2d.velocity = new Vector2(0, 0);
-        Debug.Log("exit state is running");
+
     }
 
     public override void CheckSwitchStates()

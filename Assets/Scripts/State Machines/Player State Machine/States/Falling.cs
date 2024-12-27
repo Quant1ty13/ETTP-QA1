@@ -52,6 +52,15 @@ public class Falling : BaseState
             Debug.Log("switching to Ground State");
             SwitchState(StateHandler.Grounded());
         }
+        else if (Context.DashActivate == true && Context.HasDashed == false)
+        {
+            Debug.Log("switching to dashing state from a root state");
+            SwitchState(StateHandler.RootDash());
+        }
+        else if (Context.DashActivate == true && Context.HasDashed == true)
+        {
+            Context.DashActivate = false;
+        }
     }
 
     public override void InitializeSubState()
@@ -64,10 +73,10 @@ public class Falling : BaseState
         {
             SetSubState(StateHandler.Moving());
         }
-        else if (Context.DashActivate == true)
+/*        else if (Context.DashActivate == true)
         {
             Debug.Log("switching to dashing state from a root state");
             SetSubState(StateHandler.Dashing());
-        }
+        }*/
     }
 }

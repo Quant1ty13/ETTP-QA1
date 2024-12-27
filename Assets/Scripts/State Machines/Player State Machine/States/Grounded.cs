@@ -15,8 +15,8 @@ public class Grounded : BaseState
         Context.ApexHangCounter = Context.ApexHangTime;
         Context.CoyoteTimeCounter = Context.CoyoteTime;
         Context.rb2d.gravityScale = Context.originalGravityScale;
-        Context.CanJump = !Context.IsJumping;
         Context.IsJumping = false;
+        Context.HasDashed = false;
     }
     public override void UpdateState()
     {
@@ -58,11 +58,18 @@ public class Grounded : BaseState
             Debug.Log("switching to jumping state through normal circumstances.");
             SwitchState(StateHandler.Jumping());
         }
-        else { }
+        else { };
 
         if (Context.onGround() == false && Context.CoyoteTimeCounter <= 0)
         {
             SwitchState(StateHandler.Falling());
+        }
+        else { };
+
+        if (Context.DashActivate == true)
+        {
+            Debug.Log("switching to dashing state from a root state");
+            SwitchState(StateHandler.RootDash());
         }
     }
 
@@ -77,10 +84,10 @@ public class Grounded : BaseState
         {
             SetSubState(StateHandler.Moving());
         }
-        else if (Context.DashActivate == true)
+/*        else if (Context.DashActivate == true)
         {
             Debug.Log("switching to dashing state from a root state");
             SetSubState(StateHandler.Dashing());
-        }
+        }*/
     }
 }
