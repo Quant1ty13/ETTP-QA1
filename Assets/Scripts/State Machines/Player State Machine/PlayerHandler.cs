@@ -207,7 +207,7 @@ public class PlayerHandler : PlayerStat
     private void SprintCancel() { MaxPlayerSpeed = WalkSpeed; }
     private void DashPerformed() { dashActivate = true; }
 
-    public void StartCountdown() { StartCoroutine(Cooldown()); }
+    public void StartCountdown() { StopCoroutine(Cooldown()); StartCoroutine(Cooldown()); }
 
     private IEnumerator Cooldown()
     {
