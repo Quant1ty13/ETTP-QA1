@@ -73,7 +73,7 @@ public class Grounded : BaseState
         }
         else { };
 
-        if (Context.EnableWallClimbing == true)
+        if (Context.EnableWallClimbing == true && Context.EnableWC_Cooldown == false)
         {
             SwitchState(StateHandler.RootClimb());
         }

@@ -48,6 +48,9 @@ public class PlayerHandler : PlayerStat
 
     [Header("Wall Climbing")]
     public float ClimbingSpeed;
+    public float ClimbingCooldown;
+    public float climbingCounter { get; private set; }
+    public bool enableWC_Cooldown { get; private set; }
     public bool enableWallClimbing { get; private set; }
     public bool onLeftWall() { return Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, 0.25f, defineClimbableWall); }
     public bool onRightWall() { return Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, 0.25f, defineClimbableWall); }
@@ -101,6 +104,8 @@ public class PlayerHandler : PlayerStat
 
     // Wall Climbing
     public bool EnableWallClimbing { get { return enableWallClimbing; } set { enableWallClimbing = value; } }
+    public bool EnableWC_Cooldown { get { return enableWC_Cooldown; } set { enableWC_Cooldown = value; } }
+    public float ClimbingCounter { get { return climbingCounter; } set { climbingCounter = value; } }
     #endregion
 
     private void Awake()
@@ -157,6 +162,14 @@ public class PlayerHandler : PlayerStat
         else { movement.x = Mathf.FloorToInt(movement.x); }
         currentState.UpdateStates();
 
+        if (enableWC_Cooldown == true)
+        {
+            climbingCounter -= Time.deltaTime;
+            if (climbingCounter <= 0)
+            {
+                enableWC_Cooldown = false;
+            }
+        }
     }
 
     private void FixedUpdate()

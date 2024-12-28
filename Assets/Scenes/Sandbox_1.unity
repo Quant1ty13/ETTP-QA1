@@ -17501,6 +17501,10 @@ PrefabInstance:
       value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 8303270363543578345, guid: e2acbbeeee960f749b8dc87b0535f230, type: 3}
+      propertyPath: ClimbingCooldown
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8303270363543578345, guid: e2acbbeeee960f749b8dc87b0535f230, type: 3}
       propertyPath: DecelerationRate
       value: 90
       objectReference: {fileID: 0}

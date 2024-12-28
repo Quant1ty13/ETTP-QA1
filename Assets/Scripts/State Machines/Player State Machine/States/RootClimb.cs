@@ -10,6 +10,7 @@ public class RootClimb : BaseState
 
     public override void EnterState()
     {
+        Context.ClimbingCounter = Context.ClimbingCooldown;
         LockOn();
         Debug.Log("root climb state is now entered.");
     }
@@ -38,6 +39,7 @@ public class RootClimb : BaseState
 
     public override void ExitState()
     {
+        Context.EnableWC_Cooldown = true;
         Context.rb2d.velocity = new Vector2(0, 0);
         Context.rb2d.gravityScale = Context.originalGravityScale;
         Context.EnableWallClimbing = false;
