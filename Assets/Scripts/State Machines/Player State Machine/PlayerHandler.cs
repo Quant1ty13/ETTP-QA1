@@ -59,9 +59,8 @@ public class PlayerHandler : PlayerStat
     public SoundFX soundfxManager;
     public AudioClip jump;
     public AudioClip dash;
-    [SerializeField] private GameObject PauseMenu;
+    public PauseMenu pausemenu_script;
     public AudioSource music;
-    private bool PauseMenuOn;
 
     [Header("Miscellaneous")]
     public Rigidbody2D rb2d;
@@ -112,7 +111,7 @@ public class PlayerHandler : PlayerStat
     {
         playerInputs = new PlayerController();
 
-        playerInputs.Action.Pause.performed += enablepause => EnablePauseMenu();
+        playerInputs.Action.Pause.performed += enablepause => pausemenu_script.EnablePauseMenu();
 
         playerInputs.Action.Dash.performed += dash_performed => DashPerformed();
 
@@ -199,33 +198,7 @@ public class PlayerHandler : PlayerStat
         }
     }
     // PUT EVERYTHING BELOW HERE INTO A DIFFERENT PAUSE MENU SCRIPT
-    private void EnablePauseMenu()
-    {
-        Debug.Log("is this work?");
-        if (PauseMenuOn == true)
-        {
-            ExitPause();
-        }
-        else if (PauseMenuOn == false)
-        {
-            PauseMenu.SetActive(true);
-            Time.timeScale = 0f;
-            PauseMenuOn = true;
-        }
-    }
 
-    public void ExitPause()
-    {
-        Time.timeScale = 1f;
-        PauseMenu.SetActive(false);
-        PauseMenuOn = false;
-    }
-
-    public void GoMainMenu()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
-    }
 
     private void activeJump() { jumpActivate = true; }
     private void Sprinting() { MaxPlayerSpeed = PlayerSprint; }
@@ -244,10 +217,7 @@ public class PlayerHandler : PlayerStat
         {
             Debug.Log("Climbable Wall on the right");
             enableWallClimbing = true;
-        }
-        
-
-        // Probably set a boolean to true?
+        }        
     }
     private void ClimbingCanceled() 
     {
