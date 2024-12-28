@@ -71,6 +71,12 @@ public class Grounded : BaseState
             Debug.Log("switching to dashing state from a root state");
             SwitchState(StateHandler.RootDash());
         }
+        else { };
+
+        if (Context.EnableWallClimbing == true)
+        {
+            SwitchState(StateHandler.RootClimb());
+        }
     }
 
     public override void InitializeSubState()
@@ -84,10 +90,11 @@ public class Grounded : BaseState
         {
             SetSubState(StateHandler.Moving());
         }
-/*        else if (Context.DashActivate == true)
-        {
-            Debug.Log("switching to dashing state from a root state");
-            SetSubState(StateHandler.Dashing());
-        }*/
+        else { };
+        /*        else if (Context.DashActivate == true)
+                {
+                    Debug.Log("switching to dashing state from a root state");
+                    SetSubState(StateHandler.Dashing());
+                }*/
     }
 }

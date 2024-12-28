@@ -9,6 +9,8 @@ public class Jumping : BaseState
 
     public override void EnterState()
     {
+        Debug.Log("entering jumping state");
+        Context.JumpActivate = false;
         DoJump();
     }
     public override void UpdateState()
@@ -40,6 +42,12 @@ public class Jumping : BaseState
         else if (Context.DashActivate == true && Context.HasDashed == true)
         {
             Context.DashActivate = false;
+        }
+        else { };
+
+        if (Context.EnableWallClimbing == true)
+        {
+            SwitchState(StateHandler.RootClimb());
         }
     }
 

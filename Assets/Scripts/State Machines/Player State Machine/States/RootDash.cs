@@ -37,15 +37,12 @@ public class RootDash : BaseState
     {
         if (Context.JumpActivate == true)
         {
-            Debug.Log("exiting root state through jumping");
             Context.BonusHeightCounter = Context.BonusHeight_Dash;
             SwitchState(StateHandler.Jumping());
         }
 
         if (Context.IsDashing == false)
         {
-            Debug.Log("exiting root state through IsDashing being set to false");
-            Debug.Log("IsDashing : " + Context.IsDashing);
             if (Context.onGround() == true)
             {
                 SwitchState(StateHandler.Grounded());

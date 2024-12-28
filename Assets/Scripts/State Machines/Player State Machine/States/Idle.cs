@@ -14,6 +14,7 @@ public class Idle : BaseState
     }
     public override void UpdateState()
     {
+        Context.player_animation.SetBool("isMoving", false);
         CheckSwitchStates();
 
         Context.CurrentSpeed -= Context.DecelerationRate * Time.fixedDeltaTime;
@@ -50,6 +51,12 @@ public class Idle : BaseState
         {
             Context.DashActivate = false;
         }
+        else { };
+
+/*        if (Context.EnableWallClimbing == true)
+        {
+            SwitchState(StateHandler.Climbing());
+        }*/
     }
 
     public override void InitializeSubState()

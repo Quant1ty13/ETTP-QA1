@@ -61,6 +61,12 @@ public class Falling : BaseState
         {
             Context.DashActivate = false;
         }
+        else { };
+
+        if (Context.EnableWallClimbing == true)
+        {
+            SwitchState(StateHandler.RootClimb());
+        }
     }
 
     public override void InitializeSubState()

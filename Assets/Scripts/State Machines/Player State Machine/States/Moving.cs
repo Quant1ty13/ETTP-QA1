@@ -11,6 +11,7 @@ public class Moving : BaseState
     }
     public override void UpdateState()
     {
+        Context.player_animation.SetBool("isMoving", true);
         CheckSwitchStates();
         Turn();
 
@@ -45,6 +46,12 @@ public class Moving : BaseState
         {
             Context.DashActivate = false;
         }
+        else { };
+
+/*        if (Context.EnableWallClimbing == true)
+        {
+            SwitchState(StateHandler.Climbing());
+        }*/
     }
 
     public override void InitializeSubState()

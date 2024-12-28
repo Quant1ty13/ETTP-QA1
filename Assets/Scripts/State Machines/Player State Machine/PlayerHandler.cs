@@ -46,8 +46,13 @@ public class PlayerHandler : PlayerStat
     [Header("Particle Effects")]
     public ParticleSystem dashParticle;
 
+    [Header("Wall Climbing")]
+    public float ClimbingSpeed;
+    public bool enableWallClimbing { get; private set; }
+    public bool onLeftWall() { return Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, 0.25f, defineClimbableWall); }
+    public bool onRightWall() { return Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, 0.25f, defineClimbableWall); }
+
     [Header("Audio Variables")]
-    // Sound Effect Variables
     public SoundFX soundfxManager;
     public AudioClip jump;
     public AudioClip dash;
@@ -62,8 +67,12 @@ public class PlayerHandler : PlayerStat
     public Animator player_animation;
     public SpriteRenderer sr;
     public LayerMask defineGround;
+    public LayerMask defineClimbableWall;
+    public Vector2 leftOffset;
+    public Vector2 rightOffset;
     public float originalGravityScale;
     public bool onGround() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineGround); }
+
     private Vector2 movement;
 
     #region State Variables
@@ -89,6 +98,9 @@ public class PlayerHandler : PlayerStat
     public float DashCounter { get { return dashCounter; } set { dashCounter = value; } }
     public bool HasDashed { get { return hasDashed; } set { hasDashed = value; } }
     public float BonusSpeedCounter { get { return bonusSpeedCounter; } set { bonusSpeedCounter = value; } }
+
+    // Wall Climbing
+    public bool EnableWallClimbing { get { return enableWallClimbing; } set { enableWallClimbing = value; } }
     #endregion
 
     private void Awake()
@@ -106,6 +118,8 @@ public class PlayerHandler : PlayerStat
         playerInputs.Action.Sprint.performed += sprinting => Sprinting();
         playerInputs.Action.Sprint.canceled += sprintcancel => SprintCancel();
 
+        playerInputs.Action.Climbing.performed += climbing_performed => ClimbingPerformed();
+        playerInputs.Action.Climbing.canceled += exit_climb => ClimbingCanceled();
         // setup state
         states = new StatesHandler(this);
         currentState = states.Grounded();
@@ -143,8 +157,6 @@ public class PlayerHandler : PlayerStat
         else { movement.x = Mathf.FloorToInt(movement.x); }
         currentState.UpdateStates();
 
-        if (movement.x != 0) { player_animation.SetBool("isMoving", true); }
-        else { player_animation.SetBool("isMoving", false); }
     }
 
     private void FixedUpdate()
@@ -206,14 +218,34 @@ public class PlayerHandler : PlayerStat
     private void Sprinting() { MaxPlayerSpeed = PlayerSprint; }
     private void SprintCancel() { MaxPlayerSpeed = WalkSpeed; }
     private void DashPerformed() { dashActivate = true; }
+    private void ClimbingPerformed()
+    {
+        // Detect when a climbable wall is nearby
+        if (onLeftWall() == true)
+        {
+            Debug.Log("Climbable Wall on the left");
+            enableWallClimbing = true;
+        }
+
+        if (onRightWall() == true)
+        {
+            Debug.Log("Climbable Wall on the right");
+            enableWallClimbing = true;
+        }
+        
+
+        // Probably set a boolean to true?
+    }
+    private void ClimbingCanceled() 
+    {
+        enableWallClimbing = false;
+    }
 
     public void StartCountdown() { StopCoroutine(Cooldown()); StartCoroutine(Cooldown()); }
 
     private IEnumerator Cooldown()
     {
-        Debug.Log("starting countdown to set bonus speed to 0");
         yield return new WaitForSeconds(BonusSpeedTime);
         bonusSpeedCounter = 0;
-        Debug.Log("bonus speed set to 0");
     }
 }
