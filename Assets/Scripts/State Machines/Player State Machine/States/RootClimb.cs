@@ -10,12 +10,21 @@ public class RootClimb : BaseState
 
     public override void EnterState()
     {
+        Context.player_animation.SetBool("isClimbing", true);
         Context.ClimbingCounter = Context.ClimbingCooldown;
         LockOn();
         Debug.Log("root climb state is now entered.");
     }
     public override void UpdateState()
     {
+        if (Context.Movement.y != 0)
+        {
+            Context.player_animation.SetBool("isClimb_Move", true);
+        }
+        else if (Context.Movement.x == 0)
+        {
+            Context.player_animation.SetBool("isClimb_Move", false);
+        }
         if (Context.onLeftWall() == false && Context.onRightWall() == false) { Context.EnableWallClimbing = false; }
         else { };
         //Context.rb2d.velocity = new Vector2(0, Context.Movement.y * Context.ClimbingSpeed);
@@ -39,6 +48,9 @@ public class RootClimb : BaseState
 
     public override void ExitState()
     {
+        Context.player_animation.SetBool("isClimbing", false);
+        Context.player_animation.SetBool("isClimb_Move", false);
+
         Context.EnableWC_Cooldown = true;
         Context.rb2d.velocity = new Vector2(0, 0);
         Context.rb2d.gravityScale = Context.originalGravityScale;
@@ -75,11 +87,13 @@ public class RootClimb : BaseState
         {
             // apply force to make the player closer to the wall.
             Context.rb2d.velocity = new Vector2(-4,1);
+            Context.transform.position = new Vector2(Context.transform.position.x + -0.5f, Context.transform.position.y);
         }
         else if (Context.onRightWall() == true)
         {
             // apply force
             Context.rb2d.velocity = new Vector2(4, 1);
+            Context.transform.position = new Vector2(Context.transform.position.x + 0.5f, Context.transform.position.y);
         }
     }
 }

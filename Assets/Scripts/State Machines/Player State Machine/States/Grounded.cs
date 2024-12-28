@@ -10,6 +10,8 @@ public class Grounded : BaseState
     {
         Context.player_animation.SetBool("isFalling", false);
         Context.player_animation.SetBool("isJumping", false);
+        Context.player_animation.SetBool("isClimbing", false);
+
 
         Debug.Log("ground state activated");
         Context.ApexHangCounter = Context.ApexHangTime;
