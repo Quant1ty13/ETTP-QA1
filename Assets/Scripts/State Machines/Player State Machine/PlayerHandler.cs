@@ -43,8 +43,10 @@ public class PlayerHandler : PlayerStat
     private float maxPlayerSpeed;
     public PlayerController playerInputs;
 
-    [Header("Particle Effects")]
+    [Header("Particle Effects & Overlays")]
     public ParticleSystem dashParticle;
+    public GameObject dashOverlay;
+    public Animator dash_animation;
 
     [Header("Wall Climbing")]
     public float ClimbingSpeed;
@@ -61,6 +63,7 @@ public class PlayerHandler : PlayerStat
     public AudioClip dash;
     public PauseMenu pausemenu_script;
     public AudioSource music;
+    public AudioSource sfx;
 
     [Header("Miscellaneous")]
     public Rigidbody2D rb2d;
@@ -134,6 +137,8 @@ public class PlayerHandler : PlayerStat
 
         music = GameObject.Find("BackgroundMusic").GetComponent<AudioSource>();
         music.volume = PlayerPrefs.GetFloat("MusicVolume");
+        sfx.volume = PlayerPrefs.GetFloat("SoundFXVolume");
+
 
         rb2d = GetComponent<Rigidbody2D>();
         player_animation = GetComponent<Animator>();

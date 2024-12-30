@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad980451443d70438faac0bc6c235a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TrackedObjectOffset: {x: 0, y: 2.25, z: 0}
+  m_TrackedObjectOffset: {x: 0, y: 2.95, z: 0}
   m_LookaheadTime: 0.45
   m_LookaheadSmoothing: 7
   m_LookaheadIgnoreY: 1
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 7.96
+    OrthographicSize: 9.25
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0

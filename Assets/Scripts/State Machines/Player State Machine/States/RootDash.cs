@@ -9,6 +9,7 @@ public class RootDash : BaseState
     public override void EnterState()
     {
         Debug.Log("oh no is this not being run");
+        Context.dashOverlay.SetActive(true);
         Context.IsDashing = true;
     }
     public override void UpdateState()
@@ -24,6 +25,7 @@ public class RootDash : BaseState
 
     public override void ExitState()
     {
+        Context.dashOverlay.SetActive(false);
         Context.BonusSpeedCounter = Context.BonusSpeed_Dash;
         Context.StartCountdown();
         Context.dashParticle.Stop();

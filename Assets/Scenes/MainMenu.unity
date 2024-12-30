@@ -3351,6 +3351,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorial: {fileID: 0}
   Player: {fileID: 0}
+  music: {fileID: 747248292}
+  soundfxManager: {fileID: 944461772}
 --- !u!1 &962876262
 GameObject:
   m_ObjectHideFlags: 0
@@ -4484,6 +4486,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorial: {fileID: 0}
   Player: {fileID: 0}
+  music: {fileID: 747248292}
+  soundfxManager: {fileID: 944461772}
 --- !u!114 &1160849453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5530,6 +5534,10 @@ PrefabInstance:
       propertyPath: Pan2D
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1841055590090504332, guid: ccdc4ebcdfd6d514c8e589913869fbac, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 184ed8bfc9978674e812d626ee017b8c, type: 3}
     - target: {fileID: 1841055590090504332, guid: ccdc4ebcdfd6d514c8e589913869fbac, type: 3}
       propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
       value: 0
@@ -7178,6 +7186,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorial: {fileID: 0}
   Player: {fileID: 0}
+  music: {fileID: 0}
+  soundfxManager: {fileID: 0}
 --- !u!114 &1610205878
 MonoBehaviour:
   m_ObjectHideFlags: 0

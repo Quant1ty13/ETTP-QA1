@@ -8,6 +8,17 @@ public class ButtonPlay : MonoBehaviour
     [SerializeField] GameObject tutorial;
     [SerializeField] GameObject Player;
 
+    public AudioSource music;
+    public AudioSource soundfxManager;
+
+    private void Start()
+    {
+        if (music != null && soundfxManager != null)
+        {
+            music.volume = PlayerPrefs.GetFloat("MusicVolume");
+            soundfxManager.volume = PlayerPrefs.GetFloat("SoundFXVolume");
+        }
+    }
 
     public void MainMenu()
     {
