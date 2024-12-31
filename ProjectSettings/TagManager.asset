@@ -13,6 +13,8 @@ TagManager:
   - Tutorial
   - Reset
   - Climbable
+  - Spring
+  - Crown
   layers:
   - Default
   - TransparentFX
@@ -22,7 +24,7 @@ TagManager:
   - UI
   - Ground
   - Climbable
-  - 
+  - Spring
   - 
   - 
   - 

@@ -66,17 +66,20 @@ public class PlayerHandler : PlayerStat
     public AudioSource sfx;
 
     [Header("Miscellaneous")]
+    public float SpringPower;
     public Rigidbody2D rb2d;
     private string defineCooldown;
     public Transform groundCheck;
     public Animator player_animation;
     public SpriteRenderer sr;
     public LayerMask defineGround;
+    public LayerMask defineSprings;
     public LayerMask defineClimbableWall;
     public Vector2 leftOffset;
     public Vector2 rightOffset;
     public float originalGravityScale;
     public bool onGround() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineGround); }
+    public bool onSpring() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineSprings); }
 
     private Vector2 movement;
 
@@ -179,6 +182,12 @@ public class PlayerHandler : PlayerStat
     private void FixedUpdate()
     {
         currentState.FixedUpdateStates();
+
+        if (onSpring() == true)
+        {
+            Debug.Log("spring activated");
+            rb2d.AddForce(Vector2.up * SpringPower, ForceMode2D.Impulse);
+        }
     }
 
 
@@ -202,8 +211,17 @@ public class PlayerHandler : PlayerStat
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the scene
         }
     }
-    // PUT EVERYTHING BELOW HERE INTO A DIFFERENT PAUSE MENU SCRIPT
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Crown"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the scene
+
+            // Add a win animation?
+        }
+    }
+    // Input Manager
 
     private void activeJump() { jumpActivate = true; }
     private void Sprinting() { MaxPlayerSpeed = PlayerSprint; }
