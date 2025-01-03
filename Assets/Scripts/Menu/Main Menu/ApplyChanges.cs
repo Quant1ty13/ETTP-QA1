@@ -42,10 +42,6 @@ public class ApplyChanges : MonoBehaviour
         soundfxManager = GameObject.Find("SoundFx Manager").GetComponent<AudioSource>();
 
         // Resetting values
-        music.volume = 1;
-        musicSlider.value = 1;
-        soundfxManager.volume = 1;
-        soundfxSlider.value = 1;
         music.volume = PlayerPrefs.GetFloat("MusicVolume");
         musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
         soundfxManager.volume = PlayerPrefs.GetFloat("SoundFXVolume");

@@ -7,7 +7,7 @@ public class ButtonPlay : MonoBehaviour
 {
     [SerializeField] GameObject tutorial;
     [SerializeField] GameObject Player;
-
+    [SerializeField] GameObject CrownCollectMenu;
     public AudioSource music;
     public AudioSource soundfxManager;
 
@@ -34,5 +34,16 @@ public class ButtonPlay : MonoBehaviour
     {
         Player.SetActive(true); // sets player game object to true
         tutorial.SetActive(false);
+    }
+
+    public void CrownCollected()
+    {
+        GameObject.Find("Player").GetComponent<PlayerHandler>().enabled = false;
+        CrownCollectMenu.SetActive(true);
+    }
+
+    public void NextLevel(int level)
+    {
+        SceneManager.LoadScene(level);
     }
 }

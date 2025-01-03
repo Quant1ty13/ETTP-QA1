@@ -1665,7 +1665,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 4778d5534c3c8c64b9e0a56a9639cb66, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2595,7 +2595,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: ba224a445de3c454385a682606c2ae00, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2629,6 +2629,7 @@ GameObject:
   - component: {fileID: 822341584}
   - component: {fileID: 822341583}
   - component: {fileID: 822341582}
+  - component: {fileID: 822341585}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2710,6 +2711,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &822341585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822341581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1 &835094182
 GameObject:
   m_ObjectHideFlags: 0
@@ -3032,19 +3077,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 848382654}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1610205878}
-        m_TargetAssemblyTypeName: LevelSelector, Assembly-CSharp
-        m_MethodName: set_LvlID
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &848382654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3065,7 +3098,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: e70fe5cf4534b0e44b30e0ac94b51647, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3351,6 +3384,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorial: {fileID: 0}
   Player: {fileID: 0}
+  CrownCollectMenu: {fileID: 0}
   music: {fileID: 747248292}
   soundfxManager: {fileID: 944461772}
 --- !u!1 &962876262
@@ -4486,6 +4520,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorial: {fileID: 0}
   Player: {fileID: 0}
+  CrownCollectMenu: {fileID: 0}
   music: {fileID: 747248292}
   soundfxManager: {fileID: 944461772}
 --- !u!114 &1160849453
@@ -5136,7 +5171,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 475e32b4b87b64446a971a2a7baadf52, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5827,19 +5862,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1437037842}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1610205878}
-        m_TargetAssemblyTypeName: LevelSelector, Assembly-CSharp
-        m_MethodName: set_LvlID
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1437037842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5860,7 +5883,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: e70fe5cf4534b0e44b30e0ac94b51647, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7186,6 +7209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorial: {fileID: 0}
   Player: {fileID: 0}
+  CrownCollectMenu: {fileID: 0}
   music: {fileID: 0}
   soundfxManager: {fileID: 0}
 --- !u!114 &1610205878
@@ -9237,7 +9261,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 2bfe3dcb0c38dcb40a4ccb8a46ddaadb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

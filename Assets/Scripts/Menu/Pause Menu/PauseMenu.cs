@@ -45,8 +45,8 @@ public class PauseMenu : MonoBehaviour
         }
         else if (PauseMenuOn == false)
         {
-            EventSystem.current.SetSelectedGameObject(firstSelectMain);
             Menu.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(firstSelectMain);
             Time.timeScale = 0f;
             PauseMenuOn = true;
         }

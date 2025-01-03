@@ -15,6 +15,9 @@ TagManager:
   - Climbable
   - Spring
   - Crown
+  - Spike
+  - RightCheck
+  - LeftCheck
   layers:
   - Default
   - TransparentFX
@@ -25,7 +28,7 @@ TagManager:
   - Ground
   - Climbable
   - Spring
-  - 
+  - Spike
   - 
   - 
   - 
@@ -49,6 +52,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Foreground
+    uniqueID: 3082267793
+    locked: 0
   - name: Background
     uniqueID: 2634584845
     locked: 0
@@ -57,4 +63,10 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 136823337
+    locked: 0
+  - name: Island Cloud
+    uniqueID: 2263193003
     locked: 0

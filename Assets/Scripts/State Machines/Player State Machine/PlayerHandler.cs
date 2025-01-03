@@ -4,7 +4,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 using System;
 
 public class PlayerHandler : PlayerStat
@@ -75,6 +74,7 @@ public class PlayerHandler : PlayerStat
     public LayerMask defineGround;
     public LayerMask defineSprings;
     public LayerMask defineClimbableWall;
+    public ButtonPlay buttons;
     public Vector2 leftOffset;
     public Vector2 rightOffset;
     public float originalGravityScale;
@@ -210,16 +210,22 @@ public class PlayerHandler : PlayerStat
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the scene
         }
+
+        if (collision.gameObject.CompareTag("Spike"))
+        {
+            // Once checkpoints are added, make it so that there'll be a death animation and teleport the player to that location.
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the scene
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Crown"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the scene
-
+            buttons.CrownCollected();
             // Add a win animation?
         }
+        else { };
     }
     // Input Manager
 
