@@ -57,7 +57,9 @@ public class Falling : BaseState
             Debug.Log("switching to Ground State");
             SwitchState(StateHandler.Grounded());
         }
-        else if (Context.DashActivate == true && Context.HasDashed == false)
+        else { };
+
+        if (Context.DashActivate == true && Context.HasDashed == false)
         {
             Debug.Log("switching to dashing state from a root state");
             SwitchState(StateHandler.RootDash());
@@ -66,7 +68,6 @@ public class Falling : BaseState
         {
             Context.DashActivate = false;
         }
-        else { };
 
         if (Context.EnableWallClimbing == true && Context.EnableWC_Cooldown == false)
         {

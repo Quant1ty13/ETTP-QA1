@@ -44,6 +44,7 @@ public class PlayerHandler : PlayerStat
     private float currentSpeed;
     private float maxPlayerSpeed;
     public PlayerController playerInputs;
+    public bool subRootDashOn;
 
     [Header("Particle Effects & Overlays")]
     public ParticleSystem dashParticle;

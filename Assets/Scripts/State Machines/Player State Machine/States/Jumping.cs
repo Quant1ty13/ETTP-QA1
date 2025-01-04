@@ -33,7 +33,9 @@ public class Jumping : BaseState
         {
             SwitchState(StateHandler.Falling());
         }
-        else if (Context.DashActivate == true && Context.HasDashed == false)
+        else { };
+
+        if (Context.DashActivate == true && Context.HasDashed == false)
         {
             Debug.Log("switching to dashing state from a root state");
             SwitchState(StateHandler.RootDash());
