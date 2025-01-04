@@ -27,6 +27,11 @@ public class Falling : BaseState
             else { }
         }
         else { }
+
+        if (Context.rb2d.velocity.y < Context.MaxFallSpeed)
+        {
+            Context.rb2d.velocity = new Vector2(Context.rb2d.velocity.x, Context.MaxFallSpeed);
+        }
     }
 
     public override void FixedUpdateState()

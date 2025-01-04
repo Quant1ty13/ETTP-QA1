@@ -18,6 +18,7 @@ TagManager:
   - Spike
   - RightCheck
   - LeftCheck
+  - Checkpoint
   layers:
   - Default
   - TransparentFX

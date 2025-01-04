@@ -9,7 +9,7 @@ public class Dashing : BaseState
     {
         // any functions here will not work, because ? maybe it's being counted as a substate but the root states are not seeing it that way? nvm im a fucking dumbass
         Context.IsDashing = true;
-        Context.DashActivate = false;
+        //Context.DashActivate = false;
         Context.DashCounter = Context.DashTime;
         Debug.Log("entering the dash state");
         Dash();
@@ -71,5 +71,7 @@ public class Dashing : BaseState
             Context.dashParticle.transform.localScale = new Vector3(1.75f, 1.75f, 1.75f);
             Context.dashParticle.Play();
         };
+        Context.DashActivate = false;
+
     }
 }

@@ -32,12 +32,15 @@ public class PlayerHandler : PlayerStat
     public float BonusHeight_Dash;
     public float BonusSpeed_Dash;
     public float BonusSpeedTime;
+    public float MaxFallSpeed;
+    public float DashJumpGracePeriod;
     public bool dashActivate { get; private set; }
     public bool isDashing { get; private set; }
     public float dashCounter { get; private set; }
     public float bonusHeightCounter { get; private set; }
     public bool hasDashed { get; private set; }
     public float bonusSpeedCounter { get; private set; }
+    public bool enableDashJumpGP { get; private set; }
     private float currentSpeed;
     private float maxPlayerSpeed;
     public PlayerController playerInputs;
@@ -60,6 +63,7 @@ public class PlayerHandler : PlayerStat
     public SoundFX soundfxManager;
     public AudioClip jump;
     public AudioClip dash;
+    public AudioClip hurt;
     public PauseMenu pausemenu_script;
     public AudioSource music;
     public AudioSource sfx;
@@ -82,6 +86,7 @@ public class PlayerHandler : PlayerStat
     public bool onSpring() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineSprings); }
 
     private Vector2 movement;
+    public Vector2 lastCheckpointLocation;
 
     #region State Variables
     BaseState currentState;
@@ -106,6 +111,7 @@ public class PlayerHandler : PlayerStat
     public float DashCounter { get { return dashCounter; } set { dashCounter = value; } }
     public bool HasDashed { get { return hasDashed; } set { hasDashed = value; } }
     public float BonusSpeedCounter { get { return bonusSpeedCounter; } set { bonusSpeedCounter = value; } }
+    public bool EnableDashJumpGP { get { return enableDashJumpGP; } set { enableDashJumpGP = value; } }
 
     // Wall Climbing
     public bool EnableWallClimbing { get { return enableWallClimbing; } set { enableWallClimbing = value; } }
@@ -136,7 +142,7 @@ public class PlayerHandler : PlayerStat
     }
     private void Start()
     {
-
+        lastCheckpointLocation = this.transform.position;
 
         music = GameObject.Find("BackgroundMusic").GetComponent<AudioSource>();
         music.volume = PlayerPrefs.GetFloat("MusicVolume");
@@ -177,6 +183,7 @@ public class PlayerHandler : PlayerStat
                 enableWC_Cooldown = false;
             }
         }
+        else { }
     }
 
     private void FixedUpdate()
@@ -213,8 +220,8 @@ public class PlayerHandler : PlayerStat
 
         if (collision.gameObject.CompareTag("Spike"))
         {
-            // Once checkpoints are added, make it so that there'll be a death animation and teleport the player to that location.
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the scene
+            soundfxManager.PlaySFX(hurt, true);
+            this.transform.position = lastCheckpointLocation;
         }
     }
 
