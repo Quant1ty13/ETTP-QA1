@@ -44,7 +44,6 @@ public class PlayerHandler : PlayerStat
     private float currentSpeed;
     private float maxPlayerSpeed;
     public PlayerController playerInputs;
-    public bool subRootDashOn;
 
     [Header("Particle Effects & Overlays")]
     public ParticleSystem dashParticle;
@@ -64,7 +63,8 @@ public class PlayerHandler : PlayerStat
     public SoundFX soundfxManager;
     public AudioClip jump;
     public AudioClip dash;
-    public AudioClip hurt;
+    public AudioClip spikeHurt;
+    public AudioClip lavaHurt;
     public PauseMenu pausemenu_script;
     public AudioSource music;
     public AudioSource sfx;
@@ -83,6 +83,7 @@ public class PlayerHandler : PlayerStat
     public Vector2 leftOffset;
     public Vector2 rightOffset;
     public float originalGravityScale;
+    private string isAutomaticWallClimbingOn;
     public bool onGround() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineGround); }
     public bool onSpring() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineSprings); }
 
@@ -171,6 +172,8 @@ public class PlayerHandler : PlayerStat
 
     private void Update()
     {
+        isAutomaticWallClimbingOn = PlayerPrefs.GetString("AutomaticWallClimbing");
+
         movement = playerInputs.Action.Movement.ReadValue<Vector2>(); // future me, fix the issue on input system. On keyboard, if you press W or S movement will stop entirely. Must investigate the Input System.
         if (movement.x > 0) { movement.x = Mathf.Ceil(movement.x); } // for future me, the plan for omnidirectional dashing: store the value of "movement.x" in a seperate variable before rounding up.
         else { movement.x = Mathf.FloorToInt(movement.x); }
@@ -196,10 +199,14 @@ public class PlayerHandler : PlayerStat
             Debug.Log("spring activated");
             rb2d.AddForce(Vector2.up * SpringPower, ForceMode2D.Impulse);
         }
-    }
 
-
-    // Other functions needed: 
+        switch (isAutomaticWallClimbingOn)
+        {
+            case "True":
+                ClimbingPerformed();
+                break;
+        }
+    } 
     private void jumpCancel()
     {
         // revise this if else statement to accomodate for jump buffering.
@@ -214,15 +221,14 @@ public class PlayerHandler : PlayerStat
     // Collision Check
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Reset"))
+        if (collision.gameObject.CompareTag("Lava"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the scene
+            Death(lavaHurt, true);
         }
 
         if (collision.gameObject.CompareTag("Spike"))
         {
-            soundfxManager.PlaySFX(hurt, true);
-            this.transform.position = lastCheckpointLocation;
+            Death(spikeHurt, true);
         }
     }
 
@@ -235,8 +241,9 @@ public class PlayerHandler : PlayerStat
         }
         else { };
     }
-    // Input Manager
 
+    // Input Manager
+    #region Inputs
     private void activeJump() { jumpActivate = true; }
     private void Sprinting() { MaxPlayerSpeed = PlayerSprint; }
     private void SprintCancel() { MaxPlayerSpeed = WalkSpeed; }
@@ -254,12 +261,14 @@ public class PlayerHandler : PlayerStat
         {
             Debug.Log("Climbable Wall on the right");
             enableWallClimbing = true;
-        }        
+        }
     }
-    private void ClimbingCanceled() 
+    private void ClimbingCanceled()
     {
         enableWallClimbing = false;
     }
+
+    #endregion
 
     public void StartCountdown() { StopCoroutine(Cooldown()); StartCoroutine(Cooldown()); }
 
@@ -267,5 +276,11 @@ public class PlayerHandler : PlayerStat
     {
         yield return new WaitForSeconds(BonusSpeedTime);
         bonusSpeedCounter = 0;
+    }
+
+    private void Death(AudioClip deathsfx, bool enableRandomPitch)
+    {
+        soundfxManager.PlaySFX(deathsfx, enableRandomPitch);
+        this.transform.position = lastCheckpointLocation;
     }
 }
