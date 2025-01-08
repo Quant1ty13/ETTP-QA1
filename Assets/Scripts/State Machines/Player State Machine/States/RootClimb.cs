@@ -9,7 +9,7 @@ public class RootClimb : BaseState
     public override void EnterState()
     {
         Context.player_animation.SetBool("isClimbing", true);
-        Context.ClimbingCounter = Context.ClimbingCooldown;
+        Context.ClimbingCounter = Context.ClimbingCooldown + Context.AutomaticClimbingCooldown;
         LockOn();
         Debug.Log("root climb state is now entered.");
     }
@@ -76,21 +76,17 @@ public class RootClimb : BaseState
 
     public override void InitializeSubState()
     {
-        //SetSubState(StateHandler.Climbing());
+
     }
 
     private void LockOn()
     {
         if (Context.onLeftWall() == true)
         {
-            // apply force to make the player closer to the wall.
-            //Context.rb2d.velocity = new Vector2(-4,1);
             Context.transform.position = new Vector2(Context.transform.position.x + -0.5f, Context.transform.position.y);
         }
         else if (Context.onRightWall() == true)
         {
-            // apply force
-           // Context.rb2d.velocity = new Vector2(4, 1);
             Context.transform.position = new Vector2(Context.transform.position.x + 0.5f, Context.transform.position.y);
         }
     }

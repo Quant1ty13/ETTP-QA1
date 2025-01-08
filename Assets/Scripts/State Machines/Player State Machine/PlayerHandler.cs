@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using System;
 
-public class PlayerHandler : PlayerStat
+public class PlayerHandler : MonoBehaviour
 {
     [Header("Jumping")]
     public float JumpHeight;
@@ -53,6 +53,7 @@ public class PlayerHandler : PlayerStat
     [Header("Wall Climbing")]
     public float ClimbingSpeed;
     public float ClimbingCooldown;
+    public float AutomaticClimbingCooldown;
     public float climbingCounter { get; private set; }
     public bool enableWC_Cooldown { get; private set; }
     public bool enableWallClimbing { get; private set; }
@@ -133,8 +134,7 @@ public class PlayerHandler : PlayerStat
         playerInputs.Action.Jump.performed += jumpactivate => activeJump();
         playerInputs.Action.Jump.canceled += jumpcancel => jumpCancel();
 
-        playerInputs.Action.Sprint.performed += sprinting => Sprinting();
-        playerInputs.Action.Sprint.canceled += sprintcancel => SprintCancel();
+        playerInputs.Action.Sprint.started += sprinting => Sprinting();
 
         playerInputs.Action.Climbing.performed += climbing_performed => ClimbingPerformed();
         playerInputs.Action.Climbing.canceled += exit_climb => ClimbingCanceled();
@@ -203,13 +203,16 @@ public class PlayerHandler : PlayerStat
         switch (isAutomaticWallClimbingOn)
         {
             case "True":
+                AutomaticClimbingCooldown = 0.15f;
                 ClimbingPerformed();
+                break;
+            case "False":
+                AutomaticClimbingCooldown = 0;
                 break;
         }
     } 
     private void jumpCancel()
     {
-        // revise this if else statement to accomodate for jump buffering.
         if (rb2d.velocity.y > 0f)
         {
             timeHoldingJump = 0;
@@ -245,8 +248,17 @@ public class PlayerHandler : PlayerStat
     // Input Manager
     #region Inputs
     private void activeJump() { jumpActivate = true; }
-    private void Sprinting() { MaxPlayerSpeed = PlayerSprint; }
-    private void SprintCancel() { MaxPlayerSpeed = WalkSpeed; }
+    private void Sprinting() 
+    { 
+        if (MaxPlayerSpeed == WalkSpeed)
+        {
+            MaxPlayerSpeed = PlayerSprint;
+        }
+        else if (MaxPlayerSpeed == PlayerSprint)
+        {
+            MaxPlayerSpeed = WalkSpeed;
+        }
+    }
     private void DashPerformed() { dashActivate = true; }
     private void ClimbingPerformed()
     {
