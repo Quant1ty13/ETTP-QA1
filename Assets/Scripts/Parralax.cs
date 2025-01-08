@@ -7,6 +7,7 @@ public class Parralax : MonoBehaviour
     private float startPos, length;
     public GameObject MainCam;
     public float parralaxEffect;
+
     void Start()
     {
         startPos = transform.position.x;
@@ -23,5 +24,6 @@ public class Parralax : MonoBehaviour
 
         if (temp > startPos + length) startPos += length;
         else if (temp < startPos - 1) startPos -= length;
+        else { };
     }
 }
