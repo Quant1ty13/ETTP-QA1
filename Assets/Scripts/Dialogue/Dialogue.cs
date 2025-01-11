@@ -18,7 +18,6 @@ public class Dialogue : DialogueManager
 
     public void PlayDialogue(float typingSpeed)
     {
-        Debug.Log("does this work");
         TypeSpeed = typingSpeed;
         dialogueIndex++;
         TypeDialogue(dialogue[dialogueIndex], characterPortraits[dialogueIndex]);
