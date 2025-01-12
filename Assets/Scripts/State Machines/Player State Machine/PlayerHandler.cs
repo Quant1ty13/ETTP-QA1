@@ -87,7 +87,7 @@ public class PlayerHandler : MonoBehaviour
     private string isAutomaticWallClimbingOn;
     public bool onGround() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineGround); }
     public bool onSpring() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineSprings); }
-
+    private CutsceneManager cutscenemanager;
     private Vector2 movement;
     public Vector2 lastCheckpointLocation;
 
@@ -126,6 +126,8 @@ public class PlayerHandler : MonoBehaviour
     {
         playerInputs = new PlayerController();
 
+
+        // Movement Inputs
         playerInputs.Action.Pause.performed += enablepause => pausemenu_script.EnablePauseMenu();
 
         playerInputs.Action.Dash.performed += dash_performed => DashPerformed();
@@ -279,7 +281,6 @@ public class PlayerHandler : MonoBehaviour
     {
         enableWallClimbing = false;
     }
-
     #endregion
 
     public void StartCountdown() { StopCoroutine(Cooldown()); StartCoroutine(Cooldown()); }
