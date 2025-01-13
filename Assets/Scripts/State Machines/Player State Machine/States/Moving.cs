@@ -21,6 +21,7 @@ public class Moving : BaseState
     {
         Accelerate();
         Context.rb2d.velocity = new Vector2(Context.Movement.x * Context.CurrentSpeed, Context.rb2d.velocity.y);
+        Debug.Log("current movement x velocity is: " + Context.rb2d.velocity.x);
     }
 
     public override void ExitState()
@@ -47,11 +48,6 @@ public class Moving : BaseState
             Context.DashActivate = false;
         }
         else { };
-
-/*        if (Context.EnableWallClimbing == true)
-        {
-            SwitchState(StateHandler.Climbing());
-        }*/
     }
 
     public override void InitializeSubState()
@@ -67,6 +63,7 @@ public class Moving : BaseState
 
     private void Accelerate()
     {
+        Debug.Log("Current Speed is: " + Context.CurrentSpeed);
         Context.CurrentSpeed += Context.AccelerationRate * Time.fixedDeltaTime;
         Context.CurrentSpeed = Mathf.Clamp(Context.CurrentSpeed, 0, Context.MaxPlayerSpeed + Context.BonusSpeedCounter);
     }

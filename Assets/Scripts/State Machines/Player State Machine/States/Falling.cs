@@ -11,7 +11,7 @@ public class Falling : BaseState
         Context.player_animation.SetBool("isJumping", false);
         Context.player_animation.SetBool("isFalling", true);
         Debug.Log("falling state now activated");
-        if (Context.IsJumping == true && Context.rb2d.velocity.x <= 0)
+        if (Context.IsJumping == true && Context.rb2d.velocity.y <= 0)
         {
             Context.rb2d.gravityScale = 1.85f;
         }

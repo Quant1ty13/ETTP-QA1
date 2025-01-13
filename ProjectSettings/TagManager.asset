@@ -16,6 +16,7 @@ TagManager:
   - Checkpoint
   - WallClimbTutorial
   - Lava
+  - DialogueTrigger
   layers:
   - Default
   - TransparentFX

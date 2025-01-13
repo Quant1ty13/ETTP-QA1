@@ -3467,6 +3467,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1444246423}
     - target: {fileID: 8303270363543578345, guid: e2acbbeeee960f749b8dc87b0535f230, type: 3}
+      propertyPath: MaxFallSpeed
+      value: -19
+      objectReference: {fileID: 0}
+    - target: {fileID: 8303270363543578345, guid: e2acbbeeee960f749b8dc87b0535f230, type: 3}
       propertyPath: soundfxManager
       value: 
       objectReference: {fileID: 1887501537}

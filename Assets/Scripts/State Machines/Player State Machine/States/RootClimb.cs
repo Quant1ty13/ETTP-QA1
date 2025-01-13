@@ -19,7 +19,7 @@ public class RootClimb : BaseState
         {
             Context.player_animation.SetBool("isClimb_Move", true);
         }
-        else if (Context.Movement.x == 0)
+        else if (Context.Movement.y == 0)
         {
             Context.player_animation.SetBool("isClimb_Move", false);
         }
@@ -31,7 +31,7 @@ public class RootClimb : BaseState
         {
             // somehow someway if this line of code is not here this entire code doesn't run???? what the fuck.
         }
-        else if(!Input.GetKeyDown(KeyCode.K))
+        else if (!Input.GetKeyDown(KeyCode.K))
         {
             Context.rb2d.velocity = new Vector2(0, Context.Movement.y * Context.ClimbingSpeed);
         };
@@ -50,7 +50,7 @@ public class RootClimb : BaseState
         Context.player_animation.SetBool("isClimb_Move", false);
 
         Context.EnableWC_Cooldown = true;
-        Context.rb2d.velocity = new Vector2(0, 0);
+        //Context.rb2d.velocity = Vector2.zero;
         Context.rb2d.gravityScale = Context.originalGravityScale;
         Context.EnableWallClimbing = false;
     }

@@ -30,7 +30,7 @@ public class RootDash : BaseState
         Context.StartCountdown();
         Context.dashParticle.Stop();
         Context.HasDashed = true;
-        Context.rb2d.velocity = new Vector2(0, 0);
+        //Context.rb2d.velocity = Vector2.zero;
         Debug.Log("exit state is running");
         Context.rb2d.gravityScale = Context.originalGravityScale;
     }

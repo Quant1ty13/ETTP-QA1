@@ -6,28 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class CutsceneManager : MonoBehaviour
 {
-    private PlayerController playerInput;
+    public PlayerInput playerInput;
     public string sceneName;
 
-    private void Awake()
+    public void ChangeScene()
     {
-        playerInput = new PlayerController();
-
-        playerInput.Cutscene.Skip.started += skip_cutscene => ChangeScene(sceneName);
-    }
-
-    private void OnEnable()
-    {
-        playerInput.Enable();
-    }
-
-    private void OnDisable()
-    {
-        playerInput.Disable();
-    }
-
-    public void ChangeScene(string SceneName)
-    {
-        SceneManager.LoadScene(SceneName);
+        SceneManager.LoadScene(sceneName);
     }
 }

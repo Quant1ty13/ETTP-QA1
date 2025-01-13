@@ -8,6 +8,8 @@ using System;
 
 public class PlayerHandler : MonoBehaviour
 {
+    protected PlayerInput playerInput;
+
     [Header("Jumping")]
     public float JumpHeight;
     public float JumpBufferTime;
@@ -43,7 +45,6 @@ public class PlayerHandler : MonoBehaviour
     public bool enableDashJumpGP { get; private set; }
     private float currentSpeed;
     private float maxPlayerSpeed;
-    public PlayerController playerInputs;
 
     [Header("Particle Effects & Overlays")]
     public ParticleSystem dashParticle;
@@ -57,8 +58,8 @@ public class PlayerHandler : MonoBehaviour
     public float climbingCounter { get; private set; }
     public bool enableWC_Cooldown { get; private set; }
     public bool enableWallClimbing { get; private set; }
-    public bool onLeftWall() { return Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, 0.25f, defineClimbableWall); }
-    public bool onRightWall() { return Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, 0.25f, defineClimbableWall); }
+    public bool onLeftWall() { return Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, 0.2f, defineClimbableWall); }
+    public bool onRightWall() { return Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, 0.2f, defineClimbableWall); }
 
     [Header("Audio Variables")]
     public SoundFX soundfxManager;
@@ -73,7 +74,6 @@ public class PlayerHandler : MonoBehaviour
     [Header("Miscellaneous")]
     public float SpringPower;
     public Rigidbody2D rb2d;
-    private string defineCooldown;
     public Transform groundCheck;
     public Animator player_animation;
     public SpriteRenderer sr;
@@ -87,8 +87,6 @@ public class PlayerHandler : MonoBehaviour
     private string isAutomaticWallClimbingOn;
     public bool onGround() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineGround); }
     public bool onSpring() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineSprings); }
-    private CutsceneManager cutscenemanager;
-    private Vector2 movement;
     public Vector2 lastCheckpointLocation;
 
     #region State Variables
@@ -103,7 +101,7 @@ public class PlayerHandler : MonoBehaviour
     public bool EnableJumpBuffer { get { return enableJumpBuffer; } set { enableJumpBuffer = value; } }
     public float ApexHangCounter { get { return apexHangCounter; } set { apexHangCounter = value; } }
     public bool JumpActivate { get { return jumpActivate; } set { jumpActivate = value; } }
-    public Vector2 Movement { get { return movement; } }
+    public Vector2 Movement { get { return playerInput.movement; } set { playerInput.movement = value; } } // remove set {movement = value;} later on to see if it'll cause issues.
     public float CurrentSpeed { get { return currentSpeed; } set { currentSpeed = value; } }
     public float MaxPlayerSpeed { get { return maxPlayerSpeed; } set { maxPlayerSpeed = value; } }
     public float BonusHeightCounter { get { return bonusHeightCounter; } set { bonusHeightCounter = value; } }
@@ -124,23 +122,8 @@ public class PlayerHandler : MonoBehaviour
 
     private void Awake()
     {
-        playerInputs = new PlayerController();
+        playerInput = GetComponent<PlayerInput>();
 
-
-        // Movement Inputs
-        playerInputs.Action.Pause.performed += enablepause => pausemenu_script.EnablePauseMenu();
-
-        playerInputs.Action.Dash.performed += dash_performed => DashPerformed();
-
-        playerInputs.Action.Jump.started += jumpactivating => activeJump();
-        playerInputs.Action.Jump.performed += jumpactivate => activeJump();
-        playerInputs.Action.Jump.canceled += jumpcancel => jumpCancel();
-
-        playerInputs.Action.Sprint.started += sprinting => Sprinting();
-
-        playerInputs.Action.Climbing.performed += climbing_performed => ClimbingPerformed();
-        playerInputs.Action.Climbing.canceled += exit_climb => ClimbingCanceled();
-        // setup state
         states = new StatesHandler(this);
         currentState = states.Grounded();
     }
@@ -160,25 +143,9 @@ public class PlayerHandler : MonoBehaviour
         originalGravityScale = rb2d.gravityScale;
     }
 
-    private void OnEnable()
-    {
-        playerInputs.Enable();
-    }
-
-    private void OnDisable()
-    {
-        playerInputs.Disable();
-    }
-
-    // State Manager 
-
     private void Update()
     {
         isAutomaticWallClimbingOn = PlayerPrefs.GetString("AutomaticWallClimbing");
-
-        movement = playerInputs.Action.Movement.ReadValue<Vector2>(); // future me, fix the issue on input system. On keyboard, if you press W or S movement will stop entirely. Must investigate the Input System.
-        if (movement.x > 0) { movement.x = Mathf.Ceil(movement.x); } // for future me, the plan for omnidirectional dashing: store the value of "movement.x" in a seperate variable before rounding up.
-        else { movement.x = Mathf.FloorToInt(movement.x); }
         currentState.UpdateStates();
 
         if (enableWC_Cooldown == true)
@@ -205,15 +172,15 @@ public class PlayerHandler : MonoBehaviour
         switch (isAutomaticWallClimbingOn)
         {
             case "True":
-                AutomaticClimbingCooldown = 0.15f;
+                AutomaticClimbingCooldown = 0.25f;
                 ClimbingPerformed();
                 break;
             case "False":
                 AutomaticClimbingCooldown = 0;
                 break;
         }
-    } 
-    private void jumpCancel()
+    }
+    public void jumpCancel()
     {
         if (rb2d.velocity.y > 0f)
         {
@@ -249,8 +216,8 @@ public class PlayerHandler : MonoBehaviour
 
     // Input Manager
     #region Inputs
-    private void activeJump() { jumpActivate = true; }
-    private void Sprinting() 
+    public void activeJump() { jumpActivate = true; }
+    public void Sprinting() 
     { 
         if (MaxPlayerSpeed == WalkSpeed)
         {
@@ -261,8 +228,8 @@ public class PlayerHandler : MonoBehaviour
             MaxPlayerSpeed = WalkSpeed;
         }
     }
-    private void DashPerformed() { dashActivate = true; }
-    private void ClimbingPerformed()
+    public void DashPerformed() { dashActivate = true; }
+    public void ClimbingPerformed()
     {
         // Detect when a climbable wall is nearby
         if (onLeftWall() == true)
@@ -277,7 +244,7 @@ public class PlayerHandler : MonoBehaviour
             enableWallClimbing = true;
         }
     }
-    private void ClimbingCanceled()
+    public void ClimbingCanceled()
     {
         enableWallClimbing = false;
     }
