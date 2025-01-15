@@ -5,19 +5,28 @@ using UnityEngine.Playables;
 
 public class CutsceneTrigger : MonoBehaviour
 {
-    [SerializeField] private PlayerHandler playerhandler;
+    [SerializeField] private Behaviour playerHandle;
     [SerializeField] private GameObject cutsceneUI;
     [SerializeField] private PlayableDirector cutsceneClip;
+    private bool CutscenePlayed;
 
-    private void Awake()
-    {
-        cutsceneClip.Play();
-    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
-        cutsceneUI.SetActive(true);
-        playerhandler.enabled = false;
+        if (CutscenePlayed == false)
+        {
+            CutscenePlayed = true;
+            cutsceneClip.Play();
+            cutsceneUI.SetActive(true);
+            playerHandle.enabled = false;
+        }
+    }
+
+    public void CutsceneEnd()
+    {
+        cutsceneClip.Stop();
+        playerHandle.enabled = true;
+        cutsceneUI.SetActive(false);
     }
 }
