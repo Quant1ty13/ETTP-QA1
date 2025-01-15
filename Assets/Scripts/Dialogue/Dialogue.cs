@@ -9,13 +9,7 @@ public class Dialogue : DialogueManager
     public string[] dialogue;
     public Texture[] characterPortraits;
     private int dialogueIndex = -1;
-
-
-    private void Update()
-    {
-
-    }
-
+    [SerializeField] protected GameObject dialogueBox;
     public void PlayDialogue(float typingSpeed)
     {
         TypeSpeed = typingSpeed;
@@ -24,4 +18,9 @@ public class Dialogue : DialogueManager
     }
 
     public void IncreaseSpeed(float speedIncrease) { TypeSpeed += speedIncrease; }
+
+    protected void StopDialogue()
+    {
+        dialogueBox.SetActive(false);
+    }
 }

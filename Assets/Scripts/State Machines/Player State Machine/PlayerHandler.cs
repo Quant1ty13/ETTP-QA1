@@ -58,8 +58,8 @@ public class PlayerHandler : MonoBehaviour
     public float climbingCounter { get; private set; }
     public bool enableWC_Cooldown { get; private set; }
     public bool enableWallClimbing { get; private set; }
-    public bool onLeftWall() { return Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, 0.2f, defineClimbableWall); }
-    public bool onRightWall() { return Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, 0.2f, defineClimbableWall); }
+    public bool onLeftWall() { return Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, 0.25f, defineClimbableWall); }
+    public bool onRightWall() { return Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, 0.25f, defineClimbableWall); }
 
     [Header("Audio Variables")]
     public SoundFX soundfxManager;
