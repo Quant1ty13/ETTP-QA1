@@ -20,7 +20,6 @@ public class PlayerInput : MonoBehaviour
             playerInputs.Action.Dash.performed += dash_performed => playerHandler.DashPerformed();
 
             playerInputs.Action.Jump.started += jumpactivating => playerHandler.activeJump();
-            //playerInputs.Action.Jump.performed += jumpactivate => playerHandler.activeJump();
             playerInputs.Action.Jump.canceled += jumpcancel => playerHandler.jumpCancel();
 
             playerInputs.Action.Sprint.started += sprinting => playerHandler.Sprinting();
