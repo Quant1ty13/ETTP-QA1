@@ -53,6 +53,7 @@ public class RootClimb : BaseState
         //Context.rb2d.velocity = Vector2.zero;
         Context.rb2d.gravityScale = Context.originalGravityScale;
         Context.EnableWallClimbing = false;
+
     }
 
     public override void CheckSwitchStates()

@@ -168,17 +168,18 @@ public class PlayerHandler : MonoBehaviour
             Debug.Log("spring activated");
             rb2d.AddForce(Vector2.up * SpringPower, ForceMode2D.Impulse);
         }
+        else { };
 
         switch (isAutomaticWallClimbingOn)
-        {
-            case "True":
-                AutomaticClimbingCooldown = 0.25f;
-                ClimbingPerformed();
-                break;
-            case "False":
-                AutomaticClimbingCooldown = 0;
-                break;
-        }
+            {
+              case "True":
+                  AutomaticClimbingCooldown = 0.25f;
+                  ClimbingPerformed();
+                  break;
+              case "False":
+                  AutomaticClimbingCooldown = 0;
+                  break;
+            }
     }
     public void jumpCancel()
     {
