@@ -2,55 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class Tutorials : MonoBehaviour
 {
-    public int TutorialID;
-
-    public GameObject WallClimbing_1;
-    public GameObject WallClimbing_2;
-    public GameObject Dash;
-
+    public GameObject Tip;
+    public PlayerInput playerInput;
     public PlayerHandler playerHandler;
-    private bool PlayerWatchedWallClimbing;
-    private bool PlayerWatchedDashing;
+    private bool TipShown;
+    [SerializeField] private TextMeshProUGUI tipHeader;
+    [SerializeField] private TextMeshProUGUI tipDetails;
+    [SerializeField] private RawImage tipImage;
+
+    [Header("Tip Details")]
+    [SerializeField] private string TipHeader;
+    [SerializeField, TextArea(2, 5)] private string TipDetails;
+    [SerializeField] private Texture TipImage;
 
 
-    public void NextTip()
-    {
-        WallClimbing_1.SetActive(false);
-        WallClimbing_2.SetActive(true);
-    }
-
-    public void CloseTutorial()
-    {
-        WallClimbing_2.SetActive(false);
-        playerHandler.enabled = true;
-    }
-
-    public void Thanks()
-    {
-        Dash.SetActive(false);
-        playerHandler.enabled = true;
-    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") && PlayerWatchedWallClimbing == false && TutorialID == 1)
+        if (collision.gameObject.CompareTag("Player") && TipShown == false)
         {
+            Time.timeScale = 0;
             playerHandler.rb2d.velocity = Vector2.zero;
-            PlayerWatchedWallClimbing = true;
-            playerHandler.enabled = false;
-            WallClimbing_1.SetActive(true);
+            playerInput.enabled = false;
+            TipShown = true;
+            Tip.SetActive(true);
+            tipHeader.text = TipHeader;
+            tipDetails.text = TipDetails;
+            tipImage.texture = TipImage;
         }
+    }
 
-        if (collision.gameObject.CompareTag("Player") && PlayerWatchedDashing == false && TutorialID == 2)
-        {
-            playerHandler.rb2d.velocity = Vector2.zero;
-            PlayerWatchedDashing = true;
-            playerHandler.enabled = false;
-            Dash.SetActive(true);
-            // Set Game Object Active 
-        }
+    public void ExitTip()
+    {
+        Time.timeScale = 1;
+        playerInput.enabled = true;
+        Tip.SetActive(false);
     }
 }
