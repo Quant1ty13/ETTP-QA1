@@ -8,13 +8,17 @@ public class Dialogue : DialogueManager
     [TextArea(2, 5)]
     public string[] dialogue;
     public Texture[] characterPortraits;
-    private int dialogueIndex = -1;
+    [HideInInspector] public int dialogueIndex = -1;
     [SerializeField] protected GameObject dialogueBox;
     public void PlayDialogue(float typingSpeed)
     {
         TypeSpeed = typingSpeed;
         dialogueIndex++;
-        TypeDialogue(dialogue[dialogueIndex], characterPortraits[dialogueIndex]);
+        if (dialogueIndex != dialogue.Length)
+        {
+            TypeDialogue(dialogue[dialogueIndex], characterPortraits[dialogueIndex]);
+        }
+        else if (dialogueIndex >= dialogue.Length) { return; }
     }
 
     public void IncreaseSpeed(float speedIncrease) { TypeSpeed += speedIncrease; }

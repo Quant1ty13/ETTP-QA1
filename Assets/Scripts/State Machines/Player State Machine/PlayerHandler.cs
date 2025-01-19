@@ -173,8 +173,12 @@ public class PlayerHandler : MonoBehaviour
         switch (isAutomaticWallClimbingOn)
             {
               case "True":
-                  AutomaticClimbingCooldown = 0.25f;
-                  ClimbingPerformed();
+                AutomaticClimbingCooldown = 0.25f;
+                if (enableWC_Cooldown == false)
+                {
+                    ClimbingPerformed();
+                }
+                else { };
                   break;
               case "False":
                   AutomaticClimbingCooldown = 0;

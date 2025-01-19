@@ -9,7 +9,7 @@ public class CutsceneManager : MonoBehaviour
     public PlayerInput playerInput;
     public string sceneName;
 
-    public void ChangeScene()
+    public virtual void CutsceneSkip()
     {
         SceneManager.LoadScene(sceneName);
     }

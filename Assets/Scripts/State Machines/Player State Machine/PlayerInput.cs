@@ -7,13 +7,14 @@ public class PlayerInput : MonoBehaviour
     public PlayerController playerInputs;
     [SerializeField] private PlayerHandler playerHandler;
     [SerializeField] private CutsceneManager cutSceneManager;
+    [SerializeField] private bool usePlayerInputs;
     public Vector2 movement;
 
     private void Awake()
     {
         playerInputs = new PlayerController();
 
-        if (playerInputs != null)
+        if (playerInputs != null && usePlayerInputs == true)
         {
             playerInputs.Action.Pause.performed += enablepause => playerHandler.pausemenu_script.EnablePauseMenu();
 
@@ -31,7 +32,7 @@ public class PlayerInput : MonoBehaviour
 
         if (cutSceneManager != null)
         {
-            playerInputs.Cutscene.Skip.started += skip_cutscene => cutSceneManager.ChangeScene();
+            playerInputs.Cutscene.Skip.started += skip_cutscene => cutSceneManager.CutsceneSkip();
         }
     }
 

@@ -34,7 +34,7 @@ public class TriggerBoxDialogue : Dialogue
     {
         if (AlreadyPlayed == false)
         {
-            AlreadyPlayed = true;            
+            AlreadyPlayed = true;
             StartCoroutine(StopDialogue(timeUntilDialogueDissapears));
         }
     }

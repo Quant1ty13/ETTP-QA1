@@ -50,6 +50,12 @@ public class Jumping : BaseState
         {
             SwitchState(StateHandler.RootClimb());
         }
+        else { };
+
+        if (Context.onGround() == true)
+        {
+            SwitchState(StateHandler.Grounded());
+        }
     }
 
     public override void InitializeSubState()

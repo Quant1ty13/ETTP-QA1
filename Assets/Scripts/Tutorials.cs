@@ -28,6 +28,7 @@ public class Tutorials : MonoBehaviour
         {
             Time.timeScale = 0;
             playerHandler.rb2d.velocity = Vector2.zero;
+            playerHandler.enabled = false;
             playerInput.enabled = false;
             TipShown = true;
             Tip.SetActive(true);
@@ -42,5 +43,6 @@ public class Tutorials : MonoBehaviour
         Time.timeScale = 1;
         playerInput.enabled = true;
         Tip.SetActive(false);
+        playerHandler.enabled = true;
     }
 }

@@ -20,7 +20,6 @@ public class GrassAnim : MonoBehaviour
         sr.sprite = sprite_anim[CurrentSprite];
 
         TotalSprites = sprite_anim.Length - 1;
-        Debug.Log(TotalSprites);
     }
 
     private void Update()
@@ -48,7 +47,6 @@ public class GrassAnim : MonoBehaviour
         if (CurrentSprite <= TotalSprites)
         {
             CurrentSprite += 1;
-            Debug.Log(CurrentSprite);
         }
         else { };
 
