@@ -17,6 +17,7 @@ TagManager:
   - WallClimbTutorial
   - Lava
   - DialogueTrigger
+  - Key
   layers:
   - Default
   - TransparentFX

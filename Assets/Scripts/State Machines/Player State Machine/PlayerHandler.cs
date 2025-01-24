@@ -85,6 +85,7 @@ public class PlayerHandler : MonoBehaviour
     public Vector2 rightOffset;
     public float originalGravityScale;
     private string isAutomaticWallClimbingOn;
+    public List<int> KeyList = new List<int>();
     public bool onGround() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineGround); }
     public bool onSpring() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineSprings); }
     public Vector2 lastCheckpointLocation;
