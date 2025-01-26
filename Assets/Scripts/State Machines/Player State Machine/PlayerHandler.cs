@@ -85,10 +85,14 @@ public class PlayerHandler : MonoBehaviour
     public Vector2 rightOffset;
     public float originalGravityScale;
     private string isAutomaticWallClimbingOn;
+    private const float INTERACTION_TIMER = 0.05f;
+    private float interaction_timer_counter;
     public List<int> KeyList = new List<int>();
     public bool onGround() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineGround); }
     public bool onSpring() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineSprings); }
     public Vector2 lastCheckpointLocation;
+    public bool checkInteraction { get; private set; }
+    public bool CheckInteraction { get { return checkInteraction; } set { CheckInteraction = value; } }
 
     #region State Variables
     BaseState currentState;
@@ -130,6 +134,7 @@ public class PlayerHandler : MonoBehaviour
     }
     private void Start()
     {
+        interaction_timer_counter = INTERACTION_TIMER;
         lastCheckpointLocation = this.transform.position;
 
         music = GameObject.Find("BackgroundMusic").GetComponent<AudioSource>();
@@ -158,6 +163,13 @@ public class PlayerHandler : MonoBehaviour
             }
         }
         else { }
+
+
+        if (checkInteraction == true)
+        {
+            interaction_timer_counter -= Time.deltaTime;
+            if( interaction_timer_counter <= 0) { checkInteraction = false; interaction_timer_counter =  INTERACTION_TIMER; }
+        }
     }
 
     private void FixedUpdate()
@@ -254,6 +266,8 @@ public class PlayerHandler : MonoBehaviour
     {
         enableWallClimbing = false;
     }
+
+    public void Interact() { Debug.Log("will Interact!"); checkInteraction = true;}
     #endregion
 
     public void StartCountdown() { StopCoroutine(Cooldown()); StartCoroutine(Cooldown()); }

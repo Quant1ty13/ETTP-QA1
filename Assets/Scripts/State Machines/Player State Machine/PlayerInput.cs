@@ -27,6 +27,8 @@ public class PlayerInput : MonoBehaviour
 
             playerInputs.Action.Climbing.performed += climbing_performed => playerHandler.ClimbingPerformed();
             playerInputs.Action.Climbing.canceled += exit_climb => playerHandler.ClimbingCanceled();
+
+            playerInputs.Action.Interact.started += start_interaction => playerHandler.Interact();
         }
         else { };
 
