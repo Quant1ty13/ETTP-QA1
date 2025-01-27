@@ -5,7 +5,7 @@ using UnityEngine;
 
 public abstract class BaseNPC : MonoBehaviour, IInteractable
 {
-    [SerializeField] private SpriteRenderer interactionSprite;
+    [SerializeField] protected SpriteRenderer interactionSprite;
     protected PlayerHandler playerHandler;
     private GameObject Player;
     private Vector3 playerPos;

@@ -6,7 +6,7 @@ using UnityEngine.Playables;
 public class TutorialCookie : BaseNPC, ICutscenable
 {
     [SerializeField] private PlayableDirector cutsceneClip;
-
+    public float CutsceneLength;
 
     public override void Interact()
     {
@@ -16,12 +16,19 @@ public class TutorialCookie : BaseNPC, ICutscenable
 
     public void PlayCutscene()
     {
+        interactionSprite.enabled = false;
         playerHandler.enabled = false;
         cutsceneClip.Play();
     }
     public void EndCutscene()
     {
+        interactionSprite.enabled = true;
         cutsceneClip.Stop();
         playerHandler.enabled = true;
+    }
+
+    public void SkipCutscene()
+    {
+        cutsceneClip.time = CutsceneLength;
     }
 }

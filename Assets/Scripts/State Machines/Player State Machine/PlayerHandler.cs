@@ -85,7 +85,7 @@ public class PlayerHandler : MonoBehaviour
     public Vector2 rightOffset;
     public float originalGravityScale;
     private string isAutomaticWallClimbingOn;
-    private const float INTERACTION_TIMER = 0.05f;
+    private const float INTERACTION_TIMER = 0.1f;
     private float interaction_timer_counter;
     public List<int> KeyList = new List<int>();
     public bool onGround() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineGround); }

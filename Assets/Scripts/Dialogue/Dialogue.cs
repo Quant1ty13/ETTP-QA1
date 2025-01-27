@@ -22,6 +22,7 @@ public class Dialogue : DialogueManager
     }
 
     public void IncreaseSpeed(float speedIncrease) { TypeSpeed += speedIncrease; }
+    public void DecreaseSpeed(float speedDecrease) { TypeSpeed -= speedDecrease; }
 
     protected void StopDialogue()
     {
