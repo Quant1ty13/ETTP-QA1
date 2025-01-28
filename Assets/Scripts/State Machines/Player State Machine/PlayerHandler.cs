@@ -230,6 +230,11 @@ public class PlayerHandler : MonoBehaviour
             // Add a win animation?
         }
         else { };
+
+        if (collision.gameObject.CompareTag("Poison_Water"))
+        {
+            Death(lavaHurt, true); // change to poision hurt.
+        }
     }
 
     // Input Manager

@@ -7,11 +7,12 @@ public class TutorialCookie : BaseNPC, ICutscenable
 {
     [SerializeField] private PlayableDirector cutsceneClip;
     public float CutsceneLength;
+    public bool CutscenePlayed { get; private set; }
 
     public override void Interact()
     {
         Debug.Log("you are in range of tutorial cookie and he'll engage in dialogue conversation");
-        PlayCutscene();
+        if (CutscenePlayed == false) { PlayCutscene(); CutscenePlayed = true; }
     }
 
     public void PlayCutscene()
