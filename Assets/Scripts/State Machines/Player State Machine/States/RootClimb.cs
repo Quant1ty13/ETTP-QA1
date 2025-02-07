@@ -84,11 +84,13 @@ public class RootClimb : BaseState
     {
         if (Context.onLeftWall() == true)
         {
-            Context.transform.position = new Vector2(Context.transform.position.x + -0.5f, Context.transform.position.y);
+            Context.sr.flipX = true;
+            Context.transform.position = new Vector2(Context.transform.position.x + -0.2f, Context.transform.position.y);
         }
         else if (Context.onRightWall() == true)
         {
-            Context.transform.position = new Vector2(Context.transform.position.x + 0.5f, Context.transform.position.y);
+            Context.sr.flipX = false;
+            Context.transform.position = new Vector2(Context.transform.position.x + 0.2f, Context.transform.position.y);
         }
     }
 }
