@@ -56,6 +56,13 @@ public class Jumping : BaseState
         {
             SwitchState(StateHandler.Grounded());
         }
+        else { }
+
+        if (Context.GameConcluded == true)
+        {
+            Context.GameConcluded = false;
+            SwitchState(StateHandler.Grounded());
+        }
     }
 
     public override void InitializeSubState()

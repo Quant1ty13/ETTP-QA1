@@ -62,7 +62,15 @@ public class Moving : BaseState
 
     private void Accelerate()
     {
-        Context.CurrentSpeed += Context.AccelerationRate * Time.fixedDeltaTime;
-        Context.CurrentSpeed = Mathf.Clamp(Context.CurrentSpeed, 0, Context.MaxPlayerSpeed + Context.BonusSpeedCounter);
+        if (Context.onGround() == false)
+        {
+            Context.CurrentSpeed -= Context.DecelerationRate * Time.fixedDeltaTime;
+            Context.CurrentSpeed = Mathf.Clamp(Context.CurrentSpeed, Context.MaxPlayerSpeed + Context.BonusSpeedCounter / 1.25f, Context.MaxPlayerSpeed + Context.BonusSpeedCounter);
+        }
+        else
+        {
+            Context.CurrentSpeed += Context.AccelerationRate * Time.fixedDeltaTime;
+            Context.CurrentSpeed = Mathf.Clamp(Context.CurrentSpeed, 0, Context.MaxPlayerSpeed + Context.BonusSpeedCounter);
+        }
     }
 }

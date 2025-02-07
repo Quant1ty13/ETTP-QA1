@@ -73,6 +73,14 @@ public class Falling : BaseState
         {
             SwitchState(StateHandler.RootClimb());
         }
+        else { }
+
+        if (Context.GameConcluded == true)
+        {
+            Context.JumpActivate = false;
+            Context.GameConcluded = false;
+            SwitchState(StateHandler.Grounded());
+        }
     }
 
     public override void InitializeSubState()

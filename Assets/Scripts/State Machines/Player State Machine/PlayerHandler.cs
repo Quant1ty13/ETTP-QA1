@@ -93,6 +93,8 @@ public class PlayerHandler : MonoBehaviour
     public Vector2 lastCheckpointLocation;
     public bool checkInteraction { get; private set; }
     public bool CheckInteraction { get { return checkInteraction; } set { CheckInteraction = value; } }
+    public bool gameConcluded { get; private set; }
+    public bool GameConcluded { get { return gameConcluded; } set { gameConcluded = value; } }
 
     #region State Variables
     BaseState currentState;
