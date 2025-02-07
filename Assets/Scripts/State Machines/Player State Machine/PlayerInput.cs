@@ -8,6 +8,7 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private PlayerHandler playerHandler;
     [SerializeField] private CutsceneManager cutSceneManager;
     [SerializeField] private bool usePlayerInputs;
+    [SerializeField] private bool useDialogueInput;
     public Vector2 movement;
 
     private void Awake()
@@ -35,6 +36,12 @@ public class PlayerInput : MonoBehaviour
         if (cutSceneManager != null)
         {
             playerInputs.Cutscene.Skip.started += skip_cutscene => cutSceneManager.CutsceneSkip();
+        }
+        else { }
+
+        if (useDialogueInput == true)
+        {
+            // Allow dialogue to be pushed forward.
         }
     }
 
