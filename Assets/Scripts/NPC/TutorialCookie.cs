@@ -14,7 +14,6 @@ public class TutorialCookie : BaseNPC, ICutscenable, IDialogueable
     [SerializeField] private Dialogue scriptDialogue;
     [SerializeField] private int typeSpeed;
     [SerializeField] private CinemachineVirtualCamera dialogueCamera;
-    [SerializeField] private PlayerHandler playerHandler;
 
     public override void Interact()
     {
