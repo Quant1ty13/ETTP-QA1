@@ -9,6 +9,7 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private CutsceneManager cutSceneManager;
     [SerializeField] private bool usePlayerInputs;
     [SerializeField] private bool useDialogueInput;
+    public bool dialogueEnter;
     public Vector2 movement;
 
     private void Awake()
@@ -41,6 +42,8 @@ public class PlayerInput : MonoBehaviour
 
         if (useDialogueInput == true)
         {
+            playerInputs.Dialogue.Continue.started += dialogue_play => DialogueContinue();
+
             // Allow dialogue to be pushed forward.
         }
     }
@@ -63,5 +66,10 @@ public class PlayerInput : MonoBehaviour
             if (movement.x > 0) { movement.x = Mathf.Ceil(movement.x); }
             else { movement.x = Mathf.FloorToInt(movement.x); }
         }
+    }
+
+    private void DialogueContinue()
+    {
+
     }
 }
