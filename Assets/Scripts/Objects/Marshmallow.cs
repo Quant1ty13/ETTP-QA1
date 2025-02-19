@@ -11,5 +11,7 @@ public class Marshmallow : MonoBehaviour
     {
         soundfxManager.PlaySFX(marshmallowCollected_SFX, false);
         Destroy(gameObject);
+
+        // Use JSON to save Marshmallows
     }
 }

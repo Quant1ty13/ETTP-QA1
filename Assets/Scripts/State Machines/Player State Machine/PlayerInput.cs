@@ -66,6 +66,11 @@ public class PlayerInput : MonoBehaviour
             if (movement.x > 0) { movement.x = Mathf.Ceil(movement.x); }
             else { movement.x = Mathf.FloorToInt(movement.x); }
         }
+
+        if (playerHandler.EnableWallClimbing == true)
+        {
+            movement = playerInputs.Action.MoveUp.ReadValue<Vector2>();
+        }
     }
 
     private void DialogueContinue()
