@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -65,11 +66,11 @@ public class PlayerInput : MonoBehaviour
             movement = playerInputs.Action.Movement.ReadValue<Vector2>();
             if (movement.x > 0) { movement.x = Mathf.Ceil(movement.x); }
             else { movement.x = Mathf.FloorToInt(movement.x); }
-        }
 
-        if (playerHandler.EnableWallClimbing == true)
-        {
-            movement = playerInputs.Action.MoveUp.ReadValue<Vector2>();
+            if (usePlayerInputs == true && playerHandler != null && playerHandler.EnableWallClimbing == true)
+            {
+                movement = playerInputs.Action.MoveUp.ReadValue<Vector2>();
+            }
         }
     }
 

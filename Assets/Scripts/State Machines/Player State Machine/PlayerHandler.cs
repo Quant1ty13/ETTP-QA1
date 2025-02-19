@@ -170,7 +170,7 @@ public class PlayerHandler : MonoBehaviour
         if (checkInteraction == true)
         {
             interaction_timer_counter -= Time.deltaTime;
-            if( interaction_timer_counter <= 0) { checkInteraction = false; interaction_timer_counter =  INTERACTION_TIMER; }
+            if (interaction_timer_counter <= 0) { checkInteraction = false; interaction_timer_counter = INTERACTION_TIMER; }
         }
     }
 
