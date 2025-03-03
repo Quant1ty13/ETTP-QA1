@@ -13,6 +13,7 @@ public class Gamepad_Menu : MonoBehaviour
     [Header("Exit Buttons")]
     public GameObject settingsExit, levelExit;
 
+
     void Start()
     {
         EventSystem.current.SetSelectedGameObject(mainFirstOption);
@@ -73,5 +74,18 @@ public class Gamepad_Menu : MonoBehaviour
 
         MainMenu.SetActive(true);
         SelectLevelMenu.SetActive(false);
+    }
+
+
+
+
+
+    public void EnterMenu(GameObject enterObj, GameObject exitObj, GameObject firstSelect)
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstSelect);
+
+        enterObj.SetActive(true);
+        exitObj.SetActive(false);
     }
 }
