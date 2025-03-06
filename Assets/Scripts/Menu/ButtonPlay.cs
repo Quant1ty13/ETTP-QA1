@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class ButtonPlay : MonoBehaviour
@@ -8,6 +9,7 @@ public class ButtonPlay : MonoBehaviour
     [SerializeField] GameObject tutorial;
     [SerializeField] GameObject Player;
     [SerializeField] GameObject CrownCollectMenu;
+    [SerializeField] private GameObject CrownFirstOption;
     public AudioSource music;
     public AudioSource soundfxManager;
 
@@ -40,6 +42,7 @@ public class ButtonPlay : MonoBehaviour
     {
         GameObject.Find("Player").GetComponent<PlayerHandler>().enabled = false;
         CrownCollectMenu.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(CrownFirstOption);
     }
 
     public void NextLevel(int level)

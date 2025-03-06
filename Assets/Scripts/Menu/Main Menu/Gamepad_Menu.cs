@@ -7,9 +7,11 @@ using UnityEngine.SceneManagement;
 public class Gamepad_Menu : MonoBehaviour
 {
     [Header("Main Menu Buttons")]
-    public GameObject MainMenu, SettingsMenu, SelectLevelMenu;
+    public GameObject MainMenu;
+    public GameObject SettingsMenu, SelectLevelMenu;
     [Header("First Options")]
-    public GameObject mainFirstOption, settingsFirstOption, levelButton;
+    public GameObject mainFirstOption;
+    public GameObject settingsFirstOption, levelButton;
     [Header("Exit Buttons")]
     public GameObject settingsExit, levelExit;
 
@@ -78,7 +80,7 @@ public class Gamepad_Menu : MonoBehaviour
 
 
 
-
+        
 
     public void EnterMenu(GameObject enterObj, GameObject exitObj, GameObject firstSelect)
     {

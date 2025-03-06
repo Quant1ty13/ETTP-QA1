@@ -19,7 +19,7 @@ public class TutorialCookie : BaseNPC, ICutscenable, IDialogueable
     {
         Debug.Log("you are in range of tutorial cookie and he'll engage in dialogue conversation");
         if (CutscenePlayed == false) { PlayCutscene(); CutscenePlayed = true; }
-        else { StartDialogue(scriptDialogue.dialogue, scriptDialogue.characterPortraits); }
+        //else { StartDialogue(scriptDialogue.dialogue, scriptDialogue.characterPortraits); } Hiiii, for now dialogue will be disabled with tutorial cookie to focus on other important aspects of the game C:
     }
 
     public void PlayCutscene()

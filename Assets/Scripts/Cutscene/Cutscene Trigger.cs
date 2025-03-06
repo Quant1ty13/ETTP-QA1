@@ -2,6 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Playables;
 
 public class CutsceneTrigger : CutsceneManager
@@ -12,6 +13,7 @@ public class CutsceneTrigger : CutsceneManager
     [SerializeField] private Animator topBar;
     [SerializeField] private Animator bottomBar;
     [SerializeField] private GameObject levelPassedUI;
+    [SerializeField] private GameObject FirstSelect;
     private bool CutscenePlayed;
     public float cutsceneLength;
     public CinemachineVirtualCamera endingCam;
@@ -64,6 +66,7 @@ public class CutsceneTrigger : CutsceneManager
     {
         endingCam.Priority = 12;
         levelPassedUI.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(FirstSelect);
         cutsceneClip.Stop();
         if (cutsceneUI != null)
         {

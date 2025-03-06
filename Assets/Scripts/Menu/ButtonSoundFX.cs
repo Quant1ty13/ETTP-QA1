@@ -10,6 +10,7 @@ public class ButtonSoundFX : MonoBehaviour, IPointerEnterHandler
     public AudioClip button_click;
     public void OnPointerEnter(PointerEventData eventData)
     {
+        Debug.Log("okay");
         soundfxManager.PlaySFX(hover_button, true);
     }
 
