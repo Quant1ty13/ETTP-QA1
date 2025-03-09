@@ -4,6 +4,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
 
 public class Tutorials : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class Tutorials : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tipHeader;
     [SerializeField] private TextMeshProUGUI tipDetails;
     [SerializeField] private RawImage tipImage;
+    [SerializeField] private GameObject Button;
 
     [Header("Tip Details")]
     [SerializeField] private string TipHeader;
@@ -35,6 +38,7 @@ public class Tutorials : MonoBehaviour
             tipHeader.text = TipHeader;
             tipDetails.text = TipDetails;
             tipImage.texture = TipImage;
+            EventSystem.current.SetSelectedGameObject(Button);
         }
     }
 
