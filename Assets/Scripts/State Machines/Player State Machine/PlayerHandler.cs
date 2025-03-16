@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using System;
-
+using Cinemachine;
 public class PlayerHandler : MonoBehaviour
 {
     protected PlayerInput playerInput;
@@ -29,6 +29,7 @@ public class PlayerHandler : MonoBehaviour
     public int PlayerSprint;
     public float AccelerationRate;
     public float DecelerationRate;
+    public float DashShakeForce;
     public float DashSpeed;
     public float DashTime;
     public float BonusHeight_Dash;
@@ -95,6 +96,7 @@ public class PlayerHandler : MonoBehaviour
     public bool CheckInteraction { get { return checkInteraction; } set { CheckInteraction = value; } }
     public bool gameConcluded { get; private set; }
     public bool GameConcluded { get { return gameConcluded; } set { gameConcluded = value; } }
+    public CinemachineImpulseSource impulseSource { get; private set; }
 
     #region State Variables
     BaseState currentState;
@@ -129,6 +131,7 @@ public class PlayerHandler : MonoBehaviour
 
     private void Awake()
     {
+        impulseSource = GetComponent<CinemachineImpulseSource>();
         playerInput = GetComponent<PlayerInput>();
 
         states = new StatesHandler(this);

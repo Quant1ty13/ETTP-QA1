@@ -9,6 +9,7 @@ public class RootDash : BaseState
     public override void EnterState()
     {
         Debug.Log("oh no is this not being run");
+        Context.impulseSource.GenerateImpulseWithForce(Context.DashShakeForce);
         Context.dashOverlay.SetActive(true);
         Context.IsDashing = true;
     }

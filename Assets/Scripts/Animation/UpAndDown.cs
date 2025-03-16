@@ -5,14 +5,41 @@ using UnityEngine;
 public class UpAndDown : MonoBehaviour
 {
     [SerializeField] private int animationSpeed;
-    [SerializeField] private float height;
+    [SerializeField] private float _height;
+
+    private Vector2 originalPos;
+    private bool _moveUp = true;
+
+    private void Awake()
+    {
+        originalPos = this.transform.position;
+    }
 
     private void Update()
     {
+        float truespeed = animationSpeed * Time.deltaTime;
         Vector3 object_pos = this.transform.position;
-        // Use Lerp, Clamp and Cosine to Move up and Down
-        float newY = Mathf.Sin(Time.time * animationSpeed);
 
-        transform.position = new Vector3(object_pos.x, object_pos.y + newY * height, object_pos.z);
+
+        if (object_pos.y >= originalPos.y + _height)
+        {
+            _moveUp = false;
+        }
+
+        if (object_pos.y <= originalPos.y - _height)
+        {
+            _moveUp = true;
+        }
+
+        if (_moveUp)
+        {
+            object_pos.y += _height * truespeed;
+        }
+        else
+        {
+            object_pos.y -= _height * truespeed;
+        }
+
+        transform.position = object_pos;
     }
 }
