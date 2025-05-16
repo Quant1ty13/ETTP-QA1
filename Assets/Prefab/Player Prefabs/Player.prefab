@@ -7945,16 +7945,16 @@ MonoBehaviour:
   JumpBufferTime: 0.2
   CoyoteTime: 0.1
   ApexHangTime: 0.01
-  WalkSpeed: 9
-  PlayerSprint: 12
+  jumpBonusSpeedTime: 1
+  WalkSpeed: 12
   AccelerationRate: 65
   DecelerationRate: 90
   DashShakeForce: 1
   DashSpeed: 27
   DashTime: 0.35
   BonusHeight_Dash: 3.5
-  BonusSpeed_Dash: 5
-  BonusSpeedTime: 2
+  BonusSpeed_Dash: 2
+  dashBonusSpeedTime: 3
   MaxFallSpeed: -22
   DashJumpGracePeriod: 0
   dashParticle: {fileID: 8384089727929708793}
@@ -7964,7 +7964,26 @@ MonoBehaviour:
   ClimbingCooldown: 0.25
   AutomaticClimbingCooldown: 0
   soundfxManager: {fileID: 6023030228827537338}
-  jump: {fileID: 8300000, guid: e55371fdf471fd54ea3bf3143830e702, type: 3}
+  footsteps:
+  - {fileID: 8300000, guid: 4bb5f42ee23f2184c91994abd50e12a1, type: 3}
+  - {fileID: 8300000, guid: e266c82aaae8883418732399693ea2ba, type: 3}
+  - {fileID: 8300000, guid: 389a199064d8de44baebedbbe952b07e, type: 3}
+  - {fileID: 8300000, guid: 85ba4537bc075a34d96d02f4d493120a, type: 3}
+  fall:
+  - {fileID: 8300000, guid: 21279424e5e278046af35f2e66b22b36, type: 3}
+  - {fileID: 8300000, guid: 682a2ffd9207a1c4faff661fd5f22141, type: 3}
+  - {fileID: 8300000, guid: 033d0bacf9f0ed34eab62839eb1d8aa9, type: 3}
+  - {fileID: 8300000, guid: 549eb5a17c9aff647a4731d57f9e6b3a, type: 3}
+  enterClimb:
+  - {fileID: 8300000, guid: 2c127fb01afcab4408f589dd75b5e049, type: 3}
+  - {fileID: 8300000, guid: be8d2b793340cca41aee383d5de49575, type: 3}
+  - {fileID: 8300000, guid: d321cd6146df4314198901dae27c9110, type: 3}
+  climbingUp:
+  - {fileID: 8300000, guid: 0ab4dcabef376a24ba1a9a9bcfd4165b, type: 3}
+  - {fileID: 8300000, guid: 64f9f9b41cdc8564193ddd29af8e2a48, type: 3}
+  - {fileID: 8300000, guid: 1268a80195076074c947ebb20c3e3a73, type: 3}
+  - {fileID: 8300000, guid: 6fbf90b524613314e8c8352a01611fb7, type: 3}
+  jump: {fileID: 8300000, guid: 3e2972edcca224a46b52a590ec6a8cb1, type: 3}
   dash: {fileID: 8300000, guid: 702e9c1c76557c34fb1df09269ad5434, type: 3}
   spikeHurt: {fileID: 8300000, guid: 33418dc119d9b8648848206462866701, type: 3}
   lavaHurt: {fileID: 8300000, guid: 49498659b31749b40a3c9d4dbac75c08, type: 3}

@@ -6,10 +6,21 @@ using UnityEngine.InputSystem;
 public class RootClimb : BaseState
 {
     public RootClimb(PlayerHandler currentContext, StatesHandler stateHandler) : base(currentContext, stateHandler) { InitializeSubState(); IsRootState = true; }
+    
+    // Up Parameters
+    private bool sfxUPPlayed;
+    private const float sfxUPCooldown = 0.175f;
+    private float counterUP = sfxUPCooldown;
+
+    // Down Parameters
+    private bool sfxDOWNPlayed;
+    private const float sfxDOWNCooldown = 0.1f;
+    private float counterDOWN = sfxDOWNCooldown;
 
     public override void EnterState()
     {
         Context.player_animation.SetBool("isClimbing", true);
+        Context.soundfxManager.PlayRandomSFX(Context.enterClimb, true);
         Context.ClimbingCounter = Context.ClimbingCooldown + Context.AutomaticClimbingCooldown;
         LockOn();
         Debug.Log("root climb state is now entered.");
@@ -36,13 +47,31 @@ public class RootClimb : BaseState
         {
             Context.rb2d.velocity = new Vector2(0, Context.Movement.y * Context.ClimbingSpeed);
         };
+
+        if (Context.DashActivate == true)
+        {
+            Context.DashActivate = false;
+        }
+
         Context.rb2d.gravityScale = 0f;
         CheckSwitchStates();
     }
 
     public override void FixedUpdateState()
     {
-
+        if (Context.Movement.y != 0)
+        {
+            if (Context.Movement.y < 0)
+            {
+                Context.ClimbingSpeed = 8.5f;
+                CheckForDOWNSFX();
+            }
+            else if (Context.Movement.y > 0)
+            {
+                Context.ClimbingSpeed = 6.5f;
+                CheckForUPSFX();
+            }
+        }
     }
 
     public override void ExitState()
@@ -92,6 +121,46 @@ public class RootClimb : BaseState
         {
             Context.sr.flipX = false;
             Context.transform.position = new Vector2(Context.transform.position.x + 0.2f, Context.transform.position.y);
+        }
+    }
+
+    private void CheckForUPSFX()
+    {
+        if (sfxUPPlayed == true && counterUP <= 0)
+        {
+            sfxUPPlayed = false;
+            counterUP = sfxUPCooldown;
+            return;
+        }
+
+        if (sfxUPPlayed)
+        {
+            counterUP = counterUP -= Time.fixedDeltaTime;
+        }
+        else if (!sfxUPPlayed && !Context.JustFallen)
+        {
+            sfxUPPlayed = true;
+            Context.soundfxManager.PlayRandomSFX(Context.climbingUp, true);
+        }
+    }
+
+    private void CheckForDOWNSFX()
+    {
+        if (sfxDOWNPlayed == true && counterDOWN <= 0)
+        {
+            sfxDOWNPlayed = false;
+            counterDOWN = sfxDOWNCooldown;
+            return;
+        }
+
+        if (sfxDOWNPlayed)
+        {
+            counterDOWN = counterDOWN -= Time.fixedDeltaTime;
+        }
+        else if (!sfxDOWNPlayed && !Context.JustFallen)
+        {
+            sfxDOWNPlayed = true;
+            Context.soundfxManager.PlayRandomSFX(Context.climbingUp, true);
         }
     }
 }

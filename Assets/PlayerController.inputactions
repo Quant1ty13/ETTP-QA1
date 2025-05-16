@@ -33,15 +33,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Sprint",
-                    "type": "Button",
-                    "id": "b5e2532d-6190-4cea-b1d3-6866579665f5",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Dash",
                     "type": "Button",
                     "id": "0046a85e-e6ce-492b-ac2c-2fdb65a5a3cd",
@@ -164,28 +155,6 @@
                     "processors": "",
                     "groups": "Controller",
                     "action": "Climbing",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a91be330-9b1a-4baf-a11c-f5794baf09c7",
-                    "path": "<Keyboard>/leftCtrl",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard",
-                    "action": "Sprint",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "eaa501d6-2078-4b14-9187-c391bff6f083",
-                    "path": "<Gamepad>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Controller",
-                    "action": "Sprint",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

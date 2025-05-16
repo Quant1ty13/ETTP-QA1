@@ -25,6 +25,8 @@ public class Jumping : BaseState
     public override void ExitState()
     {
         Context.JumpActivate = false;
+        Context.BonusSpeedCounter += Context.BonusSpeed_Dash;
+        Context.StartCountdown(Context.jumpBonusSpeedTime);
     }
 
     public override void CheckSwitchStates()

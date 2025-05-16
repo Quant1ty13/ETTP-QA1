@@ -25,4 +25,24 @@ public class SoundFX : MonoBehaviour
             soundfxManager.PlayOneShot(sfx);
         }
     }
+
+    public void PlayRandomSFX(AudioClip[] sfx, bool RandomPitch)
+    {
+        int totalClips = TotalClips(sfx);
+
+        int clipUsed = Random.Range(0, totalClips);
+
+        PlaySFX(sfx[clipUsed], RandomPitch);
+    }
+
+    private int TotalClips(AudioClip[] sfx)
+    {
+        int totalClips = 0;
+        foreach (AudioClip clip in sfx)
+        {
+            totalClips++;
+        }
+
+        return totalClips;
+    }
 }

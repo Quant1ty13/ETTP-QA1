@@ -26,8 +26,6 @@ public class PlayerInput : MonoBehaviour
             playerInputs.Action.Jump.started += jumpactivating => playerHandler.activeJump();
             playerInputs.Action.Jump.canceled += jumpcancel => playerHandler.jumpCancel();
 
-            playerInputs.Action.Sprint.started += sprinting => playerHandler.Sprinting();
-
             playerInputs.Action.Climbing.performed += climbing_performed => playerHandler.ClimbingPerformed();
             playerInputs.Action.Climbing.canceled += exit_climb => playerHandler.ClimbingCanceled();
 

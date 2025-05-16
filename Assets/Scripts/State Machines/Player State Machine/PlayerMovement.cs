@@ -51,9 +51,6 @@ public class PlayerMovement : MonoBehaviour
 
         playerInputs.Action.Jump.performed += jumping => Jumping(); // for future me if you want to implement Apex Hang Time, just change player movement speed for a brief period of time.
         playerInputs.Action.Jump.canceled += jumpcancel => jumpCancel();
-
-        playerInputs.Action.Sprint.performed += sprinting => Sprinting();
-        playerInputs.Action.Sprint.canceled += sprintcancel => SprintCancel();
     }
 
     private void Start()

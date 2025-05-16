@@ -15,6 +15,7 @@ public class PlayerHandler : MonoBehaviour
     public float JumpBufferTime;
     public float CoyoteTime;
     public float ApexHangTime;
+    public float jumpBonusSpeedTime;
     public bool canJump { get; private set; }
     public bool isJumping { get; private set; }
     public float coyoteTimeCounter { get; private set; }
@@ -26,7 +27,6 @@ public class PlayerHandler : MonoBehaviour
 
     [Header("Player Movement")]
     public int WalkSpeed;
-    public int PlayerSprint;
     public float AccelerationRate;
     public float DecelerationRate;
     public float DashShakeForce;
@@ -34,7 +34,7 @@ public class PlayerHandler : MonoBehaviour
     public float DashTime;
     public float BonusHeight_Dash;
     public float BonusSpeed_Dash;
-    public float BonusSpeedTime;
+    public float dashBonusSpeedTime;
     public float MaxFallSpeed;
     public float DashJumpGracePeriod;
     public bool dashActivate { get; private set; }
@@ -64,6 +64,10 @@ public class PlayerHandler : MonoBehaviour
 
     [Header("Audio Variables")]
     public SoundFX soundfxManager;
+    public AudioClip[] footsteps;
+    public AudioClip[] fall;
+    public AudioClip[] enterClimb;
+    public AudioClip[] climbingUp;
     public AudioClip jump;
     public AudioClip dash;
     public AudioClip spikeHurt;
@@ -87,11 +91,14 @@ public class PlayerHandler : MonoBehaviour
     public float originalGravityScale;
     private string isAutomaticWallClimbingOn;
     private const float INTERACTION_TIMER = 0.1f;
+    private const float JUSTFALLEN_TIMER = 0.3f;
+    private float justfallen_timer_counter;
     private float interaction_timer_counter;
     public List<int> KeyList = new List<int>();
     public bool onGround() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineGround); }
     public bool onSpring() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineSprings); }
     public Vector2 lastCheckpointLocation;
+    public bool justFallen { get; private set; }
     public bool checkInteraction { get; private set; }
     public bool CheckInteraction { get { return checkInteraction; } set { CheckInteraction = value; } }
     public bool gameConcluded { get; private set; }
@@ -114,6 +121,7 @@ public class PlayerHandler : MonoBehaviour
     public float CurrentSpeed { get { return currentSpeed; } set { currentSpeed = value; } }
     public float MaxPlayerSpeed { get { return maxPlayerSpeed; } set { maxPlayerSpeed = value; } }
     public float BonusHeightCounter { get { return bonusHeightCounter; } set { bonusHeightCounter = value; } }
+    public bool JustFallen { get { return justFallen; } set {  justFallen = value; } }
 
     // Dashing
     public bool DashActivate { get { return dashActivate; } set { dashActivate = value; } }
@@ -140,6 +148,7 @@ public class PlayerHandler : MonoBehaviour
     private void Start()
     {
         interaction_timer_counter = INTERACTION_TIMER;
+        justfallen_timer_counter = JUSTFALLEN_TIMER;
         lastCheckpointLocation = this.transform.position;
 
         music = GameObject.Find("BackgroundMusic").GetComponent<AudioSource>();
@@ -174,6 +183,12 @@ public class PlayerHandler : MonoBehaviour
         {
             interaction_timer_counter -= Time.deltaTime;
             if (interaction_timer_counter <= 0) { checkInteraction = false; interaction_timer_counter = INTERACTION_TIMER; }
+        }
+
+        if (JustFallen == true)
+        {
+            justfallen_timer_counter -= Time.deltaTime;
+            if(justfallen_timer_counter <= 0) { JustFallen = false; justfallen_timer_counter = JUSTFALLEN_TIMER; }
         }
     }
 
@@ -245,17 +260,6 @@ public class PlayerHandler : MonoBehaviour
     // Input Manager
     #region Inputs
     public void activeJump() { jumpActivate = true; }
-    public void Sprinting() 
-    { 
-        if (MaxPlayerSpeed == WalkSpeed)
-        {
-            MaxPlayerSpeed = PlayerSprint;
-        }
-        else if (MaxPlayerSpeed == PlayerSprint)
-        {
-            MaxPlayerSpeed = WalkSpeed;
-        }
-    }
     public void DashPerformed() { dashActivate = true; }
     public void ClimbingPerformed()
     {
@@ -280,12 +284,16 @@ public class PlayerHandler : MonoBehaviour
     public void Interact() { Debug.Log("will Interact!"); checkInteraction = true;}
     #endregion
 
-    public void StartCountdown() { StopCoroutine(Cooldown()); StartCoroutine(Cooldown()); }
+    public void StartCountdown(float cooldown) { StopCoroutine(Cooldown(cooldown)); StartCoroutine(Cooldown(cooldown)); }
 
-    private IEnumerator Cooldown()
+    private IEnumerator Cooldown(float time)
     {
-        yield return new WaitForSeconds(BonusSpeedTime);
-        bonusSpeedCounter = 0;
+        yield return new WaitForSeconds(time);
+        bonusSpeedCounter -= BonusSpeed_Dash;
+        if (bonusSpeedCounter <= BonusSpeed_Dash)
+        {
+            bonusSpeedCounter = 0;
+        }
     }
 
     private void Death(AudioClip deathsfx, bool enableRandomPitch)

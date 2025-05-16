@@ -55,15 +55,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Sprint"",
-                    ""type"": ""Button"",
-                    ""id"": ""b5e2532d-6190-4cea-b1d3-6866579665f5"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Dash"",
                     ""type"": ""Button"",
                     ""id"": ""0046a85e-e6ce-492b-ac2c-2fdb65a5a3cd"",
@@ -186,28 +177,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Controller"",
                     ""action"": ""Climbing"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a91be330-9b1a-4baf-a11c-f5794baf09c7"",
-                    ""path"": ""<Keyboard>/leftCtrl"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Sprint"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""eaa501d6-2078-4b14-9187-c391bff6f083"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Controller"",
-                    ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -420,7 +389,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         m_Action_Movement = m_Action.FindAction("Movement", throwIfNotFound: true);
         m_Action_Jump = m_Action.FindAction("Jump", throwIfNotFound: true);
         m_Action_Climbing = m_Action.FindAction("Climbing", throwIfNotFound: true);
-        m_Action_Sprint = m_Action.FindAction("Sprint", throwIfNotFound: true);
         m_Action_Dash = m_Action.FindAction("Dash", throwIfNotFound: true);
         m_Action_Pause = m_Action.FindAction("Pause", throwIfNotFound: true);
         m_Action_Interact = m_Action.FindAction("Interact", throwIfNotFound: true);
@@ -495,7 +463,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
     private readonly InputAction m_Action_Movement;
     private readonly InputAction m_Action_Jump;
     private readonly InputAction m_Action_Climbing;
-    private readonly InputAction m_Action_Sprint;
     private readonly InputAction m_Action_Dash;
     private readonly InputAction m_Action_Pause;
     private readonly InputAction m_Action_Interact;
@@ -507,7 +474,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Action_Movement;
         public InputAction @Jump => m_Wrapper.m_Action_Jump;
         public InputAction @Climbing => m_Wrapper.m_Action_Climbing;
-        public InputAction @Sprint => m_Wrapper.m_Action_Sprint;
         public InputAction @Dash => m_Wrapper.m_Action_Dash;
         public InputAction @Pause => m_Wrapper.m_Action_Pause;
         public InputAction @Interact => m_Wrapper.m_Action_Interact;
@@ -530,9 +496,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
             @Climbing.started += instance.OnClimbing;
             @Climbing.performed += instance.OnClimbing;
             @Climbing.canceled += instance.OnClimbing;
-            @Sprint.started += instance.OnSprint;
-            @Sprint.performed += instance.OnSprint;
-            @Sprint.canceled += instance.OnSprint;
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
@@ -558,9 +521,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
             @Climbing.started -= instance.OnClimbing;
             @Climbing.performed -= instance.OnClimbing;
             @Climbing.canceled -= instance.OnClimbing;
-            @Sprint.started -= instance.OnSprint;
-            @Sprint.performed -= instance.OnSprint;
-            @Sprint.canceled -= instance.OnSprint;
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
@@ -705,7 +665,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnClimbing(InputAction.CallbackContext context);
-        void OnSprint(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);

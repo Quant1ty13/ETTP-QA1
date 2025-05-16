@@ -6,6 +6,7 @@ public class Grounded : BaseState
 {
     public Grounded(PlayerHandler currentContext, StatesHandler stateHandler) : base(currentContext, stateHandler) { InitializeSubState(); IsRootState = true; }
 
+
     public override void EnterState()
     {
         Context.player_animation.SetBool("isFalling", false);
@@ -22,6 +23,7 @@ public class Grounded : BaseState
     }
     public override void UpdateState()
     {
+
         CheckSwitchStates();
 
     }

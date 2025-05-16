@@ -47,6 +47,7 @@ public class Falling : BaseState
     {
         // Clean-up Logic if needed
         Context.rb2d.gravityScale = Context.originalGravityScale;
+        Context.JustFallen = true;
     }
 
     public override void CheckSwitchStates()
@@ -55,6 +56,7 @@ public class Falling : BaseState
         if (Context.onGround() == true)
         {
             Debug.Log("switching to Ground State");
+            Context.soundfxManager.PlayRandomSFX(Context.fall, true);
             SwitchState(StateHandler.Grounded());
         }
         else { };
