@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Threading;
-using static UnityEngine.RuleTile.TilingRuleOutput;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 public class Moving : BaseState
 {
     public Moving(PlayerHandler currentContext, StatesHandler stateHandler) : base(currentContext, stateHandler) { }
     private bool sfxPlayed;
     private const float sfxCooldown = 0.25f;
     private float counter = sfxCooldown;
+
     public override void EnterState()
     {
         Debug.Log("enterring moving state");
@@ -22,7 +21,13 @@ public class Moving : BaseState
         CheckSwitchStates();
         Turn();
 
-        if (!Context.onGround() && (Context.onLeftWall() || Context.onRightWall()) && Context.rb2d.velocity.y < 0 && Context.EnableWallClimbing == false)
+        if (Context.onGround())
+        {
+            Debug.Log("Playing Moving Particle Effect!");
+            CheckForParticle();
+        }
+
+        if (Context.rb2d.velocity.y < 0 && Context.EnableWallClimbing == false)
         {
             JumpCorrection();
         }
@@ -82,6 +87,7 @@ public class Moving : BaseState
     {
         if (Context.Movement.x > 0) { Context.sr.flipX = false; }
         else if (Context.Movement.x < 0) { Context.sr.flipX = true; }
+        Context.moveParticle.transform.rotation = Quaternion.Euler(-90, Context.sr.flipX ? -180 : 0, 0);
     }
 
     private void Accelerate()
@@ -125,5 +131,10 @@ public class Moving : BaseState
             sfxPlayed = true;
             Context.soundfxManager.PlayRandomSFX(Context.footsteps, true);
         }
+    }
+
+    private void CheckForParticle()
+    {
+        Context.moveParticle.Emit(10);
     }
 }

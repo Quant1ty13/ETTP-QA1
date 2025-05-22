@@ -92,7 +92,7 @@ public class Jumping : BaseState
         Context.EnableJumpBuffer = false;
         Context.JumpActivate = true;
         Context.TimeSinceJump = 0;
-        Context.soundfxManager.PlaySFX(Context.jump, true);
+        Context.soundfxManager.PlayRandomSFX(Context.jump, true);
         Context.rb2d.AddForce(Vector2.up * (Context.JumpHeight + Context.BonusHeightCounter), ForceMode2D.Impulse);
         Context.BonusHeightCounter = 0;
         Context.IsJumping = true;

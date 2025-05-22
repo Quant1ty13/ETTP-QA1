@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -49,6 +48,7 @@ public class PlayerHandler : MonoBehaviour
 
     [Header("Particle Effects & Overlays")]
     public ParticleSystem dashParticle;
+    public ParticleSystem moveParticle;
     public GameObject dashOverlay;
     public Animator dash_animation;
 
@@ -64,11 +64,12 @@ public class PlayerHandler : MonoBehaviour
 
     [Header("Audio Variables")]
     public SoundFX soundfxManager;
+    public BaseAmbience baseAmbience;
     public AudioClip[] footsteps;
     public AudioClip[] fall;
     public AudioClip[] enterClimb;
     public AudioClip[] climbingUp;
-    public AudioClip jump;
+    public AudioClip[] jump;
     public AudioClip dash;
     public AudioClip spikeHurt;
     public AudioClip lavaHurt;
@@ -88,6 +89,8 @@ public class PlayerHandler : MonoBehaviour
     public ButtonPlay buttons;
     public Vector2 leftOffset;
     public Vector2 rightOffset;
+    public GameObject BL_Raycast;
+    public GameObject ML_Raycast;
     public float originalGravityScale;
     private string isAutomaticWallClimbingOn;
     private const float INTERACTION_TIMER = 0.1f;
@@ -139,6 +142,7 @@ public class PlayerHandler : MonoBehaviour
 
     private void Awake()
     {
+        soundfxManager.ambience = baseAmbience;
         impulseSource = GetComponent<CinemachineImpulseSource>();
         playerInput = GetComponent<PlayerInput>();
 

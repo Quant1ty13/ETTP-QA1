@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eee6f133e9382949912005ddac22b7e, type: 3}
+  m_Name: ForestAmbience
+  m_EditorClassIdentifier: 
+  ambienceSFX:
+  - {fileID: 8300000, guid: 0e2d8c662313e2647adcec5c07cfc272, type: 3}
+  - {fileID: 8300000, guid: ede2f79a4f164594aae591fabc9dcfcb, type: 3}
+  - {fileID: 8300000, guid: a8b10dddf09321d45a3ad5e5565f4f2c, type: 3}
+  - {fileID: 8300000, guid: 502066ec46bb97a45917a4473fc62b3b, type: 3}
+  maxAmbienceWait: 20
+  lowestAmbienceWait: 14
