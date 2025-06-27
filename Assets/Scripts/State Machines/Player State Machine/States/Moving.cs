@@ -6,6 +6,7 @@ using System.Threading;
 public class Moving : BaseState
 {
     public Moving(PlayerHandler currentContext, StatesHandler stateHandler) : base(currentContext, stateHandler) { }
+    private bool jumpCorrected;
     private bool sfxPlayed;
     private const float sfxCooldown = 0.25f;
     private float counter = sfxCooldown;
@@ -23,13 +24,14 @@ public class Moving : BaseState
 
         if (Context.onGround())
         {
+            jumpCorrected = false;
             Debug.Log("Playing Moving Particle Effect!");
             CheckForParticle();
         }
 
-        if (Context.rb2d.velocity.y < 0 && Context.EnableWallClimbing == false)
+        if (Context.onGround() == false && Context.rb2d.velocity.y < 0 && Context.EnableWallClimbing == false)
         {
-            JumpCorrection();
+            //EdgeCorrection();
         }
 
 
@@ -108,9 +110,39 @@ public class Moving : BaseState
         }
     }
 
-    private void JumpCorrection()
+    private void EdgeCorrection() // Note: This probably does work as intended, however this function will remain unused as it doesn't seem to fit the game.
     {
-        // Nudge player to their opposite direction for a few frames, whilst respecting their current horizontal movement. WILL BE IMPLEMENTED SOON.
+        // Left Side Raycasts
+        RaycastHit2D hitBottomLeftWall = Physics2D.Raycast(Context.BL_Raycast.transform.position, Vector2.left, 0.35f, Context.defineGround);
+        Debug.DrawRay(Context.BL_Raycast.transform.position, Vector2.left * 0.35f, Color.red);
+
+        RaycastHit2D hitMiddleLeftWall = Physics2D.Raycast(Context.ML_Raycast.transform.position, Vector2.left, 0.35f, Context.defineGround);
+        Debug.DrawRay(Context.ML_Raycast.transform.position, Vector2.left * 0.35f, Color.red);
+
+        // Right Side Raycasts
+        RaycastHit2D hitBottomRightWall = Physics2D.Raycast(Context.BR_Raycast.transform.position, -Vector2.left, 0.35f, Context.defineGround);
+        Debug.DrawRay(Context.BR_Raycast.transform.position, -Vector2.left * 0.35f, Color.red);
+
+        RaycastHit2D hitMiddleRightWall = Physics2D.Raycast(Context.MR_Raycast.transform.position, -Vector2.left, 0.35f, Context.defineGround);
+        Debug.DrawRay(Context.MR_Raycast.transform.position, -Vector2.left * 0.35f, Color.red);
+
+        if (jumpCorrected == false)
+        {
+            bool jumpCorrecting = false;
+
+            if ((hitBottomLeftWall.collider != null && hitMiddleLeftWall.collider == null) ||
+                (hitBottomRightWall.collider != null && hitMiddleRightWall.collider == null))
+            {
+                Context.transform.position = new Vector2(Context.transform.position.x, Context.transform.position.y + 0.1f);
+                jumpCorrecting = true;
+            }
+            else if ((hitBottomLeftWall.collider == null && hitMiddleLeftWall.collider == null) ||
+                (hitBottomRightWall.collider == null && hitMiddleRightWall.collider == null) && jumpCorrecting == true)
+            {
+                jumpCorrected = true;
+                Debug.Log("Players' Jump has been successfully corrected");
+            }
+        }
     }
 
     private void CheckForSFX()

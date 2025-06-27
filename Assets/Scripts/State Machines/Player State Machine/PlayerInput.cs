@@ -10,6 +10,7 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private CutsceneManager cutSceneManager;
     [SerializeField] private bool usePlayerInputs;
     [SerializeField] private bool useDialogueInput;
+    public bool UsePlayerInputs { get { return usePlayerInputs; } set { usePlayerInputs = value; } }
     public bool dialogueEnter;
     public Vector2 movement;
 
@@ -59,7 +60,7 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
-        if (playerInputs != null)
+        if (playerInputs != null && usePlayerInputs == true)
         {
             movement = playerInputs.Action.Movement.ReadValue<Vector2>();
             if (movement.x > 0) { movement.x = Mathf.Ceil(movement.x); }
@@ -69,6 +70,10 @@ public class PlayerInput : MonoBehaviour
             {
                 movement = playerInputs.Action.MoveUp.ReadValue<Vector2>();
             }
+        }
+        else if (playerInputs != null && usePlayerInputs == false)
+        {
+            movement.x = 0;
         }
     }
 

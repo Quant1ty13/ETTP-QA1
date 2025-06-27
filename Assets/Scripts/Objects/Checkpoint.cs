@@ -17,8 +17,11 @@ public class Checkpoint : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            playerHandler.soundfxManager.PlaySFX(checkpoint, true);
-            playerHandler.lastCheckpointLocation = checkpointLocation;
+            if (playerHandler.lastCheckpointLocation != checkpointLocation)
+            {
+                playerHandler.soundfxManager.PlaySFX(checkpoint, true);
+                playerHandler.lastCheckpointLocation = checkpointLocation;
+            }
         }
     }
 }

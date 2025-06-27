@@ -14,11 +14,14 @@ public class TutorialCookie : BaseNPC, ICutscenable, IDialogueable
     [SerializeField] private Dialogue scriptDialogue;
     [SerializeField] private int typeSpeed;
     [SerializeField] private CinemachineVirtualCamera dialogueCamera;
+    [SerializeField] private GameObject Tip;
+    public bool showTipInstead;
 
     public override void Interact()
     {
         Debug.Log("you are in range of tutorial cookie and he'll engage in dialogue conversation");
-        if (CutscenePlayed == false) { PlayCutscene(); CutscenePlayed = true; }
+        if (showTipInstead) { Tip.SetActive(true); }
+        if (CutscenePlayed == false && showTipInstead == false) { PlayCutscene(); CutscenePlayed = true; }
         //else { StartDialogue(scriptDialogue.dialogue, scriptDialogue.characterPortraits); } Hiiii, for now dialogue will be disabled with tutorial cookie to focus on other important aspects of the game C:
     }
 

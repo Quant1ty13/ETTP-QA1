@@ -24,6 +24,7 @@ public class Jumping : BaseState
 
     public override void ExitState()
     {
+        Context.JumpQueue = false;
         Context.JumpActivate = false;
         Context.BonusSpeedCounter += Context.BonusSpeed_Dash;
         Context.StartCountdown(Context.jumpBonusSpeedTime);
@@ -86,13 +87,28 @@ public class Jumping : BaseState
 
     public void DoJump()
     {
+        if (Context.JumpQueue == true)
+        {
+            return;
+        }
+        Context.JumpQueue = true;
         Context.player_animation.SetBool("isJumping", true);
-
         Debug.Log("jumping!");
         Context.EnableJumpBuffer = false;
         Context.JumpActivate = true;
         Context.TimeSinceJump = 0;
         Context.soundfxManager.PlayRandomSFX(Context.jump, true);
+        if (Context.enableClimbJump == true && Context.Movement.y > 0)
+        {
+            // Enable Boost if you're wall climbing
+            Context.rb2d.velocity = new Vector2(Context.rb2d.velocity.x, Context.rb2d.velocity.y);
+        }
+        else
+        {
+            // Ensures that the players' jumps are always consistent.
+            Context.rb2d.velocity = new Vector2(Context.rb2d.velocity.x, 0);
+        }
+        Context.EnableClimbJump = false;
         Context.rb2d.AddForce(Vector2.up * (Context.JumpHeight + Context.BonusHeightCounter), ForceMode2D.Impulse);
         Context.BonusHeightCounter = 0;
         Context.IsJumping = true;

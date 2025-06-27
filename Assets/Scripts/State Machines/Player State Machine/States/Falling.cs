@@ -41,11 +41,16 @@ public class Falling : BaseState
             Context.EnableJumpBuffer = true;
             Context.TimeSinceJump += Time.deltaTime;
         }
+        else if (Context.JumpActivate == false)
+        {
+            Context.EnableJumpBuffer = false;
+        }
     }
 
     public override void ExitState()
     {
         // Clean-up Logic if needed
+        Context.EnableCoyoteDashJump = false;
         Context.rb2d.gravityScale = Context.originalGravityScale;
         Context.JustFallen = true;
     }
@@ -53,13 +58,21 @@ public class Falling : BaseState
     public override void CheckSwitchStates()
     {
         // When onGround(True), switch to Idle State
-        if (Context.onGround() == true)
+        if (Context.onGround() == true || Context.onSpring() || Context.onGround_Climb())
         {
             Debug.Log("switching to Ground State");
             Context.soundfxManager.PlayRandomSFX(Context.fall, true);
             SwitchState(StateHandler.Grounded());
         }
         else { };
+
+        if (Context.enableCoyoteDashJump == true && Context.JumpActivate == true)
+        {
+            Context.rb2d.gravityScale = 0f;
+            Context.BonusHeightCounter = Context.BonusHeight_Dash + 4;
+            //Context.rb2d.velocity = new Vector2(Context.rb2d.velocity.x, 0);
+            SwitchState(StateHandler.Jumping());
+        }
 
         if (Context.DashActivate == true && Context.HasDashed == false)
         {

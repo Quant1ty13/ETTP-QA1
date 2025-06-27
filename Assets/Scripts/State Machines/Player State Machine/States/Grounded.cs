@@ -44,8 +44,9 @@ public class Grounded : BaseState
     public override void CheckSwitchStates()
     {
         // Check if the Jump Buffer Timer from "Falling", is lower than the Jump Buffer counter. If so, switch states to Jumping.
-        if (Context.TimeSinceJump <= Context.JumpBufferTime && Context.EnableJumpBuffer == true)
+        if (Context.TimeSinceJump <= Context.JumpBufferTime && Context.EnableJumpBuffer == true && !Context.onSpring())
         {
+            // make it so that the player cannot jump on a spring. currently doesnt work
             Debug.Log("switching to jumping state through jump buffer.");
             Context.TimeSinceJump = 0;
             Context.JumpActivate = true;

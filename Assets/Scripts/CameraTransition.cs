@@ -3,24 +3,20 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
-public class FreeFallCamZone : MonoBehaviour
+public class CameraTransition : MonoBehaviour
 {
-    public CinemachineVirtualCamera mainCam;
-    public CinemachineVirtualCamera freeFallCam;
-
+    public GameObject transitionCam;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            freeFallCam.Priority = 11;
-            mainCam.Priority = 9;
+            transitionCam.SetActive(true);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        mainCam.Priority = 11;
-        freeFallCam.Priority = 9;
+        transitionCam.SetActive(false);
     }
 }

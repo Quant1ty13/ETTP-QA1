@@ -13,9 +13,10 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] protected AudioClip typingAudio;
     public AudioSource sfx;
     private bool AudioPlaying;
-
+    [SerializeField] protected bool EndDialogue = false;
     private const string HTML_BLACK = "<color=#00000000>";
     private const float MaxTypeTime = 0.1f;
+    [SerializeField] protected bool isTyping;
 
     private void Start()
     {
@@ -34,6 +35,7 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator TextType(string text)
     {
+        isTyping = true;
         dialogueText.text = "";
 
         string originalText = text;
@@ -55,6 +57,8 @@ public class DialogueManager : MonoBehaviour
 
             yield return new WaitForSeconds(MaxTypeTime / TypeSpeed);
         }
+
+        isTyping = false;
     }
 
     private IEnumerator TextAudio(AudioClip typeaudio)

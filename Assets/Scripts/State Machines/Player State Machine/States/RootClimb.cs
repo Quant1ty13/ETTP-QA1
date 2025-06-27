@@ -90,7 +90,8 @@ public class RootClimb : BaseState
     {
         if (Context.JumpActivate == true)
         {
-            Context.EnableWallClimbing = false;
+            //Context.EnableWallClimbing = false;
+            Context.EnableClimbJump = true;
             SwitchState(StateHandler.Jumping());
         }
         else { };

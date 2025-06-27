@@ -14,11 +14,14 @@ public class Dialogue : DialogueManager
     {
         TypeSpeed = typingSpeed;
         dialogueIndex++;
-        if (dialogueIndex != dialogue.Length)
+
+
+        if (!isTyping && dialogueIndex != dialogue.Length)
         {
+            Debug.Log("checking if this is constantly running");
             TypeDialogue(dialogue[dialogueIndex], characterPortraits[dialogueIndex]);
         }
-        else if (dialogueIndex >= dialogue.Length) { return; }
+        else if (dialogueIndex >= dialogue.Length) {return; }
     }
 
     public void IncreaseSpeed(float speedIncrease) { TypeSpeed += speedIncrease; }
@@ -26,6 +29,10 @@ public class Dialogue : DialogueManager
 
     protected void StopDialogue()
     {
+        Debug.Log("stopping dialogue");
+        StopCoroutine(dialogue[dialogueIndex]);
+        dialogueIndex = -1;
+        isTyping = false;
         dialogueBox.SetActive(false);
     }
 }

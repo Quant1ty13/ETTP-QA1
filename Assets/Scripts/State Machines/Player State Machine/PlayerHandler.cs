@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using System;
 using Cinemachine;
+using UnityEngine.UI;
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 public class PlayerHandler : MonoBehaviour
 {
     protected PlayerInput playerInput;
@@ -49,8 +52,11 @@ public class PlayerHandler : MonoBehaviour
     [Header("Particle Effects & Overlays")]
     public ParticleSystem dashParticle;
     public ParticleSystem moveParticle;
+    public ParticleSystem deathParticle;
+    public ParticleSystem flameParticle;
     public GameObject dashOverlay;
     public Animator dash_animation;
+    private bool flameParticlePlayed = false;
 
     [Header("Wall Climbing")]
     public float ClimbingSpeed;
@@ -76,6 +82,7 @@ public class PlayerHandler : MonoBehaviour
     public PauseMenu pausemenu_script;
     public AudioSource music;
     public AudioSource sfx;
+    [SerializeField] private AudioClip spring_sfx;
 
     [Header("Miscellaneous")]
     public float SpringPower;
@@ -91,6 +98,10 @@ public class PlayerHandler : MonoBehaviour
     public Vector2 rightOffset;
     public GameObject BL_Raycast;
     public GameObject ML_Raycast;
+    public GameObject BR_Raycast;
+    public GameObject MR_Raycast;
+    public GameObject GroundTrigger;
+    public Image BlackScreen;
     public float originalGravityScale;
     private string isAutomaticWallClimbingOn;
     private const float INTERACTION_TIMER = 0.1f;
@@ -99,14 +110,35 @@ public class PlayerHandler : MonoBehaviour
     private float interaction_timer_counter;
     public List<int> KeyList = new List<int>();
     public bool onGround() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineGround); }
-    public bool onSpring() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineSprings); }
+    public bool onGround_Climb() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineClimbableWall); }
+    public bool onSpring() { return Physics2D.OverlapCircle(groundCheck.position, 0.33f, defineSprings); }
     public Vector2 lastCheckpointLocation;
+    public bool enableClimbJump { get; private set; }
+    public bool EnableClimbJump { get { return enableClimbJump; } set {  enableClimbJump = value; } }
+    public bool jumpQueue { get; private set; }
+    public bool JumpQueue { get { return jumpQueue; } set { jumpQueue = value; } }
+    public bool enableCoyoteDashJump { get; private set; }
+    public bool EnableCoyoteDashJump { get { return enableCoyoteDashJump; } set { enableCoyoteDashJump = value; } }
     public bool justFallen { get; private set; }
     public bool checkInteraction { get; private set; }
     public bool CheckInteraction { get { return checkInteraction; } set { CheckInteraction = value; } }
     public bool gameConcluded { get; private set; }
     public bool GameConcluded { get { return gameConcluded; } set { gameConcluded = value; } }
     public CinemachineImpulseSource impulseSource { get; private set; }
+
+    // Death Animation
+    public bool activateDeathAnim;
+    private bool disappearPlayer;
+    private const float PLAYER_DISAPPEAR_TIME = 0.2f;
+    private float disappearCounter;
+    private const float FADE_BLACK_TIME = 0.5f;
+    private float fadeTB_Counter;
+    private float alphaCounter_PLAYER = 1;
+    private float alphaCounter_BS = 0;
+    private bool fadeIn;
+    private float fadeIn_Counter;
+    private const float FADE_IN_TIME = 0.5f;
+    private float waitCounter = 0.15f;
 
     #region State Variables
     BaseState currentState;
@@ -124,7 +156,7 @@ public class PlayerHandler : MonoBehaviour
     public float CurrentSpeed { get { return currentSpeed; } set { currentSpeed = value; } }
     public float MaxPlayerSpeed { get { return maxPlayerSpeed; } set { maxPlayerSpeed = value; } }
     public float BonusHeightCounter { get { return bonusHeightCounter; } set { bonusHeightCounter = value; } }
-    public bool JustFallen { get { return justFallen; } set {  justFallen = value; } }
+    public bool JustFallen { get { return justFallen; } set { justFallen = value; } }
 
     // Dashing
     public bool DashActivate { get { return dashActivate; } set { dashActivate = value; } }
@@ -143,7 +175,9 @@ public class PlayerHandler : MonoBehaviour
     private void Awake()
     {
         soundfxManager.ambience = baseAmbience;
+
         impulseSource = GetComponent<CinemachineImpulseSource>();
+
         playerInput = GetComponent<PlayerInput>();
 
         states = new StatesHandler(this);
@@ -165,10 +199,91 @@ public class PlayerHandler : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         MaxPlayerSpeed = WalkSpeed;
         originalGravityScale = rb2d.gravityScale;
+
+        disappearCounter = PLAYER_DISAPPEAR_TIME;
+        fadeTB_Counter = FADE_BLACK_TIME;
+        fadeIn_Counter = FADE_IN_TIME;
     }
 
     private void Update()
     {
+
+        #region DeathAnim
+        if (activateDeathAnim == true)
+        {
+            playerInput.UsePlayerInputs = false;
+
+            // Make player turn to Zero Opacity
+            if (disappearPlayer == false)
+            {
+                rb2d.velocity = new Vector2(0, 0);
+                alphaCounter_PLAYER -= 0.08f;
+                sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alphaCounter_PLAYER);
+
+                disappearCounter -= Time.deltaTime;
+
+                if (disappearCounter <= 0)
+                {
+                    disappearPlayer = true;
+                    disappearCounter = PLAYER_DISAPPEAR_TIME;
+                    alphaCounter_PLAYER = 1;
+                }
+            }
+
+            // Fade To Black
+            if (disappearPlayer == true && fadeIn == false)
+            {
+                //alphaCounter_BS += 0.04f;
+                alphaCounter_BS += (2.7f * Time.deltaTime);
+                BlackScreen.color = new Color(BlackScreen.color.r, BlackScreen.color.g, BlackScreen.color.b, alphaCounter_BS);
+
+                fadeTB_Counter -= Time.deltaTime;
+
+                if (fadeTB_Counter <= 0)
+                {
+                    alphaCounter_BS = 1;
+                    this.transform.position = lastCheckpointLocation;
+                    rb2d.gravityScale = originalGravityScale;
+                    fadeIn = true;
+                    fadeTB_Counter = FADE_BLACK_TIME;
+                }
+            }
+
+            // Fade Black Out
+            if (fadeIn == true)
+            {
+                if (waitCounter >= 0)
+                {
+                    waitCounter -= Time.deltaTime;
+                    return;
+                }
+
+                sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alphaCounter_PLAYER);
+
+                //alphaCounter_BS -= 0.04f;
+                alphaCounter_BS -= (2.7f * Time.deltaTime);
+                BlackScreen.color = new Color(BlackScreen.color.r, BlackScreen.color.g, BlackScreen.color.b, alphaCounter_BS);
+
+                fadeIn_Counter -= Time.deltaTime;
+
+                if (fadeIn_Counter <= 0.1)
+                {
+                    playerInput.UsePlayerInputs = true;
+                }
+
+                if (fadeIn_Counter <= 0)
+                {
+                    alphaCounter_BS = 0;
+                    activateDeathAnim = false;
+                    waitCounter = 0.1f;
+                    disappearPlayer = false;
+                    fadeIn = false;
+                    fadeIn_Counter = FADE_IN_TIME;
+                }
+            }
+        }
+        #endregion
+
         isAutomaticWallClimbingOn = PlayerPrefs.GetString("AutomaticWallClimbing");
         currentState.UpdateStates();
 
@@ -192,7 +307,20 @@ public class PlayerHandler : MonoBehaviour
         if (JustFallen == true)
         {
             justfallen_timer_counter -= Time.deltaTime;
-            if(justfallen_timer_counter <= 0) { JustFallen = false; justfallen_timer_counter = JUSTFALLEN_TIMER; }
+            if (justfallen_timer_counter <= 0) { JustFallen = false; justfallen_timer_counter = JUSTFALLEN_TIMER; }
+        }
+
+        if (hasDashed == true && flameParticlePlayed == false)
+        {
+            Debug.Log("playing flame particle");
+            flameParticlePlayed = true;
+            //flameParticle.Emit(1); works but ugly as shit
+            flameParticle.Play();
+        }
+        else if(flameParticlePlayed == true && hasDashed  == false)
+        {
+            flameParticlePlayed = false;
+            flameParticle.Stop();
         }
     }
 
@@ -203,27 +331,31 @@ public class PlayerHandler : MonoBehaviour
         if (onSpring() == true)
         {
             Debug.Log("spring activated");
+            soundfxManager.PlaySFX(spring_sfx, true);
+            rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
             rb2d.AddForce(Vector2.up * SpringPower, ForceMode2D.Impulse);
         }
         else { };
 
         switch (isAutomaticWallClimbingOn)
-            {
-              case "True":
+        {
+            case "True":
                 AutomaticClimbingCooldown = 0.25f;
                 if (enableWC_Cooldown == false)
                 {
                     ClimbingPerformed();
                 }
                 else { };
-                  break;
-              case "False":
-                  AutomaticClimbingCooldown = 0;
-                  break;
-            }
+                break;
+            case "False":
+                AutomaticClimbingCooldown = 0;
+                break;
+        }
     }
     public void jumpCancel()
     {
+        jumpActivate = false;
+
         if (rb2d.velocity.y > 0f)
         {
             timeHoldingJump = 0;
@@ -263,11 +395,33 @@ public class PlayerHandler : MonoBehaviour
 
     // Input Manager
     #region Inputs
-    public void activeJump() { jumpActivate = true; }
-    public void DashPerformed() { dashActivate = true; }
+    public void activeJump()
+    { 
+        if (!CheckForPlayerInput())
+        {
+            return;
+        }
+
+        jumpActivate = true; 
+    }
+    public void DashPerformed()
+    {
+        if (!CheckForPlayerInput())
+        {
+            return;
+        }
+
+        dashActivate = true; 
+    }
     public void ClimbingPerformed()
     {
+        if (!CheckForPlayerInput())
+        {
+            return;
+        }
+
         // Detect when a climbable wall is nearby
+
         if (onLeftWall() == true)
         {
             Debug.Log("Climbable Wall on the left");
@@ -285,10 +439,12 @@ public class PlayerHandler : MonoBehaviour
         enableWallClimbing = false;
     }
 
-    public void Interact() { Debug.Log("will Interact!"); checkInteraction = true;}
+    public void Interact() { Debug.Log("will Interact!"); checkInteraction = true; }
     #endregion
 
     public void StartCountdown(float cooldown) { StopCoroutine(Cooldown(cooldown)); StartCoroutine(Cooldown(cooldown)); }
+
+    public void EnableDashJumpAfterFall() { StartCoroutine(DisableDashCoyoteJump()); }
 
     private IEnumerator Cooldown(float time)
     {
@@ -300,9 +456,37 @@ public class PlayerHandler : MonoBehaviour
         }
     }
 
+    private IEnumerator DisableDashCoyoteJump()
+    {
+        yield return new WaitForSeconds(DashJumpGracePeriod);
+        enableCoyoteDashJump = false;
+    }
+
     private void Death(AudioClip deathsfx, bool enableRandomPitch)
     {
+        if (activateDeathAnim == true)
+        {
+            return;
+        }
+
         soundfxManager.PlaySFX(deathsfx, enableRandomPitch);
-        this.transform.position = lastCheckpointLocation;
+        impulseSource.GenerateImpulseWithForce(3);
+        deathParticle.Play();
+        playerInput.UsePlayerInputs = true;
+        activateDeathAnim = true;
+        rb2d.gravityScale = 0f;
+        rb2d.velocity = new Vector2(0, 0);
+    }
+
+    private bool CheckForPlayerInput()
+    {
+        if (playerInput.UsePlayerInputs)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
