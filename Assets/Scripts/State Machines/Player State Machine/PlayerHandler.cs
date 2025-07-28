@@ -54,17 +54,25 @@ public class PlayerHandler : MonoBehaviour
     public ParticleSystem moveParticle;
     public ParticleSystem deathParticle;
     public ParticleSystem flameParticle;
+    //public ParticleSystem slideParticle;
     public GameObject dashOverlay;
     public Animator dash_animation;
     private bool flameParticlePlayed = false;
 
-    [Header("Wall Climbing")]
+    [Header("Wall Climbing & Wall Sliding")]
     public float ClimbingSpeed;
     public float ClimbingCooldown;
     public float AutomaticClimbingCooldown;
+    public float SlideJumpPower;
+    public float SlideCooldown;
     public float climbingCounter { get; private set; }
     public bool enableWC_Cooldown { get; private set; }
     public bool enableWallClimbing { get; private set; }
+    public bool enableWallSliding { get; private set; } // Wall Sliding
+    public bool enableWallSlideJump { get; private set; }
+    public bool justSlideJump { get; private set; }
+    public bool enableSlideCooldown { get; private set; }
+    public float lastSlidDirection { get; private set; }
     public bool onLeftWall() { return Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, 0.25f, defineClimbableWall); }
     public bool onRightWall() { return Physics2D.OverlapCircle((Vector2)transform.position + rightOffset, 0.25f, defineClimbableWall); }
 
@@ -108,13 +116,14 @@ public class PlayerHandler : MonoBehaviour
     private const float JUSTFALLEN_TIMER = 0.3f;
     private float justfallen_timer_counter;
     private float interaction_timer_counter;
+    private float slide_cooldown_counter;
     public List<int> KeyList = new List<int>();
     public bool onGround() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineGround); }
     public bool onGround_Climb() { return Physics2D.OverlapCircle(groundCheck.position, 0.25f, defineClimbableWall); }
     public bool onSpring() { return Physics2D.OverlapCircle(groundCheck.position, 0.33f, defineSprings); }
     public Vector2 lastCheckpointLocation;
     public bool enableClimbJump { get; private set; }
-    public bool EnableClimbJump { get { return enableClimbJump; } set {  enableClimbJump = value; } }
+    public bool EnableClimbJump { get { return enableClimbJump; } set { enableClimbJump = value; } }
     public bool jumpQueue { get; private set; }
     public bool JumpQueue { get { return jumpQueue; } set { jumpQueue = value; } }
     public bool enableCoyoteDashJump { get; private set; }
@@ -125,6 +134,8 @@ public class PlayerHandler : MonoBehaviour
     public bool gameConcluded { get; private set; }
     public bool GameConcluded { get { return gameConcluded; } set { gameConcluded = value; } }
     public CinemachineImpulseSource impulseSource { get; private set; }
+    public bool accessPlayerInputs { get { return playerInput.UsePlayerInputs; } set { playerInput.UsePlayerInputs = value; } }
+    public bool AccessPlayerInputs { get { return accessPlayerInputs; } set { accessPlayerInputs = value; } }
 
     // Death Animation
     public bool activateDeathAnim;
@@ -170,8 +181,25 @@ public class PlayerHandler : MonoBehaviour
     public bool EnableWallClimbing { get { return enableWallClimbing; } set { enableWallClimbing = value; } }
     public bool EnableWC_Cooldown { get { return enableWC_Cooldown; } set { enableWC_Cooldown = value; } }
     public float ClimbingCounter { get { return climbingCounter; } set { climbingCounter = value; } }
+
+    // Sliding
+    public bool EnableWallSliding { get { return enableWallSliding; } set { enableWallSliding = value; } }
+    public bool EnableWallSlideJump { get { return enableWallSlideJump; } set { enableWallSlideJump = value; } }
+    public bool JustSlideJump { get { return justSlideJump; } set { justSlideJump = value; } }
+    public bool EnableSlideCooldown { get { return enableSlideCooldown; } set { enableSlideCooldown = value; } }
+    public float LastSlidDirection { get { return lastSlidDirection; } set { lastSlidDirection = value; } }
     #endregion
 
+    // Wall Sliding Specific Variables
+    private const float TEMPORARY_MOVE_STOP_TIME = 0.24f;
+    private float timeCounter;
+    public bool enableSlideHorizontalTimer { get; private set; }
+    public bool EnableSlideHorizontalTimer { get { return enableSlideHorizontalTimer; } set { enableSlideHorizontalTimer = value; } }
+    private const float SLIDE_HORIZONTAL_TIME = 0.245f;
+    private float horizontalMovement;
+
+
+    private bool checkForGameConclusion;
     private void Awake()
     {
         soundfxManager.ambience = baseAmbience;
@@ -190,8 +218,8 @@ public class PlayerHandler : MonoBehaviour
         lastCheckpointLocation = this.transform.position;
 
         music = GameObject.Find("BackgroundMusic").GetComponent<AudioSource>();
-        music.volume = PlayerPrefs.GetFloat("MusicVolume");
-        sfx.volume = PlayerPrefs.GetFloat("SoundFXVolume");
+        music.volume = PlayerPrefs.GetFloat("MusicVolume", 1);
+        sfx.volume = PlayerPrefs.GetFloat("SoundFXVolume", 1);
 
 
         rb2d = GetComponent<Rigidbody2D>();
@@ -207,7 +235,6 @@ public class PlayerHandler : MonoBehaviour
 
     private void Update()
     {
-
         #region DeathAnim
         if (activateDeathAnim == true)
         {
@@ -298,6 +325,18 @@ public class PlayerHandler : MonoBehaviour
         else { }
 
 
+        if (JustSlideJump == true)
+        {
+            timeCounter += Time.deltaTime;
+        }
+
+        if (timeCounter >= TEMPORARY_MOVE_STOP_TIME)
+        {
+            timeCounter = 0;
+            rb2d.velocity = new Vector2(0, rb2d.velocity.y);
+            JustSlideJump = false;
+        }
+
         if (checkInteraction == true)
         {
             interaction_timer_counter -= Time.deltaTime;
@@ -310,6 +349,17 @@ public class PlayerHandler : MonoBehaviour
             if (justfallen_timer_counter <= 0) { JustFallen = false; justfallen_timer_counter = JUSTFALLEN_TIMER; }
         }
 
+        if (enableSlideCooldown == true)
+        {
+            slide_cooldown_counter += Time.deltaTime;
+        }
+
+        if (slide_cooldown_counter >= SlideCooldown)
+        {
+            slide_cooldown_counter = 0;
+            enableSlideCooldown = false;
+        }
+
         if (hasDashed == true && flameParticlePlayed == false)
         {
             Debug.Log("playing flame particle");
@@ -317,7 +367,7 @@ public class PlayerHandler : MonoBehaviour
             //flameParticle.Emit(1); works but ugly as shit
             flameParticle.Play();
         }
-        else if(flameParticlePlayed == true && hasDashed  == false)
+        else if (flameParticlePlayed == true && hasDashed == false)
         {
             flameParticlePlayed = false;
             flameParticle.Stop();
@@ -327,6 +377,34 @@ public class PlayerHandler : MonoBehaviour
     private void FixedUpdate()
     {
         currentState.FixedUpdateStates();
+
+        if (JustSlideJump == true && enableSlideHorizontalTimer == true)
+        {
+            float originalHorizontalMovement = rb2d.velocity.x;
+            horizontalMovement = rb2d.velocity.x;
+            if (horizontalMovement <= -0.1f)
+            {
+                horizontalMovement -= (-SlideJumpPower / SLIDE_HORIZONTAL_TIME) * Time.deltaTime;
+            }
+            else if (horizontalMovement >= 0.1f)
+            {
+                horizontalMovement -= (SlideJumpPower / SLIDE_HORIZONTAL_TIME) * Time.deltaTime;
+            }
+            Debug.Log(rb2d.velocity.x);
+
+            if (horizontalMovement > -0.1f && horizontalMovement < 0.1f)
+            {
+                horizontalMovement = originalHorizontalMovement;
+                return;
+            }
+
+            if ((horizontalMovement <= -0.1f && Movement.x < -0.1f) || (horizontalMovement >= 0.1f && Movement.x > 0.1f))
+            {
+                horizontalMovement = originalHorizontalMovement;
+                return;
+            }
+            rb2d.velocity = new Vector2(horizontalMovement, rb2d.velocity.y);
+        }
 
         if (onSpring() == true)
         {
@@ -356,7 +434,13 @@ public class PlayerHandler : MonoBehaviour
     {
         jumpActivate = false;
 
-        if (rb2d.velocity.y > 0f)
+        if (rb2d.velocity.y > 0f && justSlideJump == true)
+        {
+            timeHoldingJump = 0;
+            rb2d.velocity = new Vector2(rb2d.velocity.x, rb2d .velocity.y * 0.5f);
+        }
+
+        if (rb2d.velocity.y > 0f && justSlideJump == false)
         {
             timeHoldingJump = 0;
             rb2d.velocity = new Vector2(0, rb2d.velocity.y * 0.5f);
@@ -376,6 +460,8 @@ public class PlayerHandler : MonoBehaviour
         {
             Death(spikeHurt, true);
         }
+
+        WallChecker();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -393,16 +479,24 @@ public class PlayerHandler : MonoBehaviour
         }
     }
 
+    public void OnCollisionStay2D(Collision2D collision)
+    {
+        if (!enableWallSliding)
+        {
+            WallChecker();
+        }
+    }
+
     // Input Manager
     #region Inputs
     public void activeJump()
-    { 
+    {
         if (!CheckForPlayerInput())
         {
             return;
         }
 
-        jumpActivate = true; 
+        jumpActivate = true;
     }
     public void DashPerformed()
     {
@@ -411,7 +505,7 @@ public class PlayerHandler : MonoBehaviour
             return;
         }
 
-        dashActivate = true; 
+        dashActivate = true;
     }
     public void ClimbingPerformed()
     {
@@ -487,6 +581,43 @@ public class PlayerHandler : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+
+    private void WallChecker()
+    {
+        if (rb2d.velocity.y >= -0.5f || enableWallClimbing == true)
+        {
+            return;
+        }
+
+        RaycastHit2D hitBottomLeftWall = Physics2D.Raycast(BL_Raycast.transform.position, Vector2.left, 0.35f, defineGround);
+        RaycastHit2D hitBottomRightWall = Physics2D.Raycast(BR_Raycast.transform.position, -Vector2.left, 0.35f, defineGround);
+
+        //TEMPORARY STEP
+        if (lastSlidDirection > 0.1f)
+        {
+            if (sr.flipX == true)
+            {
+                // Left
+                slide_cooldown_counter = SlideCooldown;
+                enableSlideCooldown = false;
+            }
+        }
+        else if (lastSlidDirection < -0.1f)
+        {
+            if (sr.flipX == false)
+            {
+                // Right
+                slide_cooldown_counter = SlideCooldown;
+                enableSlideCooldown = false;
+            }
+        }
+
+        if ((hitBottomLeftWall || hitBottomRightWall))
+        {
+            Debug.Log("enable wall sliding boolean");
+            enableWallSliding = true;
         }
     }
 }

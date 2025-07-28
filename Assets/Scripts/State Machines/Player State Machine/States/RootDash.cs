@@ -82,6 +82,7 @@ public class RootDash : BaseState
         Context.BonusSpeedCounter += Context.BonusSpeed_Dash;
         Context.StartCountdown(Context.dashBonusSpeedTime);
         Context.dashParticle.Stop();
+        Context.IsDashing = false;
         Context.HasDashed = true;
         //Context.rb2d.velocity = Vector2.zero;
         Debug.Log("exit state is running");

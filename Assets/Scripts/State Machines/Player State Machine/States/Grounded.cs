@@ -13,7 +13,7 @@ public class Grounded : BaseState
         Context.player_animation.SetBool("isJumping", false);
         Context.player_animation.SetBool("isClimbing", false);
 
-
+        Context.JustSlideJump = false;
         Debug.Log("ground state activated");
         Context.ApexHangCounter = Context.ApexHangTime;
         Context.CoyoteTimeCounter = Context.CoyoteTime;

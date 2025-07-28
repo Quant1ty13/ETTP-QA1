@@ -40,8 +40,11 @@ public class Moving : BaseState
 
     public override void FixedUpdateState()
     {
-        Accelerate();
-        Context.rb2d.velocity = new Vector2(Context.Movement.x * Context.CurrentSpeed, Context.rb2d.velocity.y);
+        if (Context.justSlideJump == false || Context.enableWallSlideJump == true)
+        {
+            Accelerate();
+            Context.rb2d.velocity = new Vector2(Context.Movement.x * Context.CurrentSpeed, Context.rb2d.velocity.y);
+        }
 
         if (Context.onGround() == true && Context.JumpActivate == false)
         {
@@ -62,7 +65,7 @@ public class Moving : BaseState
     public override void CheckSwitchStates()
     {
         // When movement.x reaches 0, switch to Idle State
-        if (Context.Movement.x == 0)
+        if (Context.Movement.x == 0 && Context.JustSlideJump == false)
         {
             SwitchState(StateHandler.Idle());
         }
@@ -78,6 +81,11 @@ public class Moving : BaseState
             Context.DashActivate = false;
         }
         else { };
+
+/*        if (Context.enableWallSliding == true)
+        {
+            SwitchState(StateHandler.Sliding());
+        }*/
     }
 
     public override void InitializeSubState()

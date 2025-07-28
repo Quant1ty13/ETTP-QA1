@@ -17,6 +17,9 @@ public class CameraTransition : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        transitionCam.SetActive(false);
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            transitionCam.SetActive(false);
+        }
     }
 }

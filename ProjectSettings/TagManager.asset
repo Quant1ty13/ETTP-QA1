@@ -32,7 +32,7 @@ TagManager:
   - Spike
   - Lava
   - Poison_Water
-  - 
+  - Breakable Pieces
   - 
   - 
   - 
@@ -53,7 +53,7 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Foreground
+  - name: Background Two
     uniqueID: 3082267793
     locked: 0
   - name: Background
@@ -70,4 +70,7 @@ TagManager:
     locked: 0
   - name: Island Cloud
     uniqueID: 2263193003
+    locked: 0
+  - name: Foreground
+    uniqueID: 1028617833
     locked: 0

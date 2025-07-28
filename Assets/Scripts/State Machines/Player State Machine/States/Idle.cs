@@ -52,10 +52,15 @@ public class Idle : BaseState
         }
         else { };
 
-/*        if (Context.EnableWallClimbing == true)
+        /*if (Context.enableWallSliding == true)
         {
-            SwitchState(StateHandler.Climbing());
-        }*/
+            SwitchState(StateHandler.Sliding());
+        }
+
+        /*        if (Context.EnableWallClimbing == true)
+                {
+                    SwitchState(StateHandler.Climbing());
+                }*/
     }
 
     public override void InitializeSubState()

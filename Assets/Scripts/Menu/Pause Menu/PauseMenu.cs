@@ -29,6 +29,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject firstSelectMain;
     public GameObject firstSelectSettings;
     public GameObject SettingsButton;
+    public bool GameConcluded;
     public void SetMusicVolume(float volume) { musicvolume = volume; }
     public void SetSFXVolume(float volume) { soundfxvolume = volume; }
     public void EnableAutomaticWallClimbing(bool eAWC) { enableAutomaticWallClimbing = eAWC; }
@@ -46,10 +47,10 @@ public class PauseMenu : MonoBehaviour
                 break;
         }
 
-        music.volume = PlayerPrefs.GetFloat("MusicVolume");
-        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
-        soundfxManager.volume = PlayerPrefs.GetFloat("SoundFXVolume");
-        soundfxSlider.value = PlayerPrefs.GetFloat("SoundFXVolume");
+        music.volume = PlayerPrefs.GetFloat("MusicVolume", 1);
+        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1);
+        soundfxManager.volume = PlayerPrefs.GetFloat("SoundFXVolume", 1);
+        soundfxSlider.value = PlayerPrefs.GetFloat("SoundFXVolume", 1);
 
         automaticWallClimbing_checkBox.isOn = enableAutomaticWallClimbing;
     }
@@ -60,7 +61,7 @@ public class PauseMenu : MonoBehaviour
         {
             ExitPause();
         }
-        else if (PauseMenuOn == false && SettingsOn == false)
+        else if (PauseMenuOn == false && SettingsOn == false && GameConcluded == false)
         {
             Menu.SetActive(true);
             EventSystem.current.SetSelectedGameObject(firstSelectMain);

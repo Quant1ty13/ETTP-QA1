@@ -21,4 +21,6 @@ public class StatesHandler
     public BaseState RootDash() { return new RootDash(context, this); }
     public BaseState Climbing() { return new Climbing(context, this); }
     public BaseState RootClimb() { return new RootClimb(context, this); }
+    public BaseState RootSliding() { return new RootSliding(context, this); }
+    public BaseState Sliding() { return new Sliding(context, this); }
 }
