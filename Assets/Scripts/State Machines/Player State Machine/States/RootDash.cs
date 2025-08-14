@@ -83,8 +83,13 @@ public class RootDash : BaseState
         Context.StartCountdown(Context.dashBonusSpeedTime);
         Context.dashParticle.Stop();
         Context.IsDashing = false;
-        Context.HasDashed = true;
+        if (!Context.externalEnableDashCooldown)
+        {
+            Debug.Log("State of Context.externalEnableDashCooldown" + Context.externalEnableDashCooldown);
+            Context.HasDashed = true;
+        }
         //Context.rb2d.velocity = Vector2.zero;
+        Context.EnableSlideCooldown = true;
         Debug.Log("exit state is running");
         Context.rb2d.gravityScale = Context.originalGravityScale;
     }

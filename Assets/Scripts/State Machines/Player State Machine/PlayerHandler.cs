@@ -46,6 +46,8 @@ public class PlayerHandler : MonoBehaviour
     public bool hasDashed { get; private set; }
     public float bonusSpeedCounter { get; private set; }
     public bool enableDashJumpGP { get; private set; }
+    public bool externalEnableDashCooldown { get; private set; }
+    public bool ExternalEnableDashCooldown { get {  return externalEnableDashCooldown; } set { externalEnableDashCooldown = value;} }
     private float currentSpeed;
     private float maxPlayerSpeed;
 

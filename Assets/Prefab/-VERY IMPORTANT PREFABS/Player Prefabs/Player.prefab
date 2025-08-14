@@ -13323,8 +13323,8 @@ MonoBehaviour:
   JumpBufferTime: 0.1
   CoyoteTime: 0.1
   ApexHangTime: 0.01
-  jumpBonusSpeedTime: 1.15
-  WalkSpeed: 12
+  jumpBonusSpeedTime: 0.75
+  WalkSpeed: 11
   AccelerationRate: 65
   DecelerationRate: 90
   DashShakeForce: 2.25

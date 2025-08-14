@@ -19,6 +19,7 @@ public class Grounded : BaseState
         Context.CoyoteTimeCounter = Context.CoyoteTime;
         Context.rb2d.gravityScale = Context.originalGravityScale;
         Context.IsJumping = false;
+        Context.ExternalEnableDashCooldown = false;
         Context.HasDashed = false;
     }
     public override void UpdateState()
