@@ -11,6 +11,7 @@ public class RootDash : BaseState
     private float dashCorrectionCounter;
     public override void EnterState()
     {
+        Context.ExternalEnableDashCooldown = false;
         dashCorrectionCounter = dashCorrectionTime;
         enableDashCorrection = false;
         Debug.Log("oh no is this not being run");

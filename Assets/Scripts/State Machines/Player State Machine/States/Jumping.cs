@@ -25,6 +25,12 @@ public class Jumping : BaseState
             Context.JustSlideJump = false;
         }*/
 
+        if (Context.externalEnableDashCooldown)
+        {
+            Debug.Log("State of Context.externalEnableDashCooldown" + Context.externalEnableDashCooldown);
+            Context.HasDashed = false;
+        }
+
         CheckSwitchStates();
     }
 

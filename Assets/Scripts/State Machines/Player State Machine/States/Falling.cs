@@ -31,6 +31,12 @@ public class Falling : BaseState
         {
             Context.rb2d.velocity = new Vector2(Context.rb2d.velocity.x, Context.MaxFallSpeed);
         }
+
+        if (Context.externalEnableDashCooldown)
+        {
+            Debug.Log("State of Context.externalEnableDashCooldown" + Context.externalEnableDashCooldown);
+            Context.HasDashed = false;
+        }
     }
 
     public override void FixedUpdateState()

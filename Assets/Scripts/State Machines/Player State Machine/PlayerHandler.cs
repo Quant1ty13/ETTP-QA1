@@ -588,7 +588,7 @@ public class PlayerHandler : MonoBehaviour
 
     private void WallChecker()
     {
-        if (rb2d.velocity.y >= -0.5f || enableWallClimbing == true)
+        if (rb2d.velocity.y >= -0.25f || enableWallClimbing == true)
         {
             return;
         }

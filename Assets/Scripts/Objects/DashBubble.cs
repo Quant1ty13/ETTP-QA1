@@ -25,7 +25,8 @@ public class DashBubble : MonoBehaviour
             _sr.color = Color.gray;
             _activated = true;
             _playerHandler.ExternalEnableDashCooldown = true;
-            Debug.Log("hello");
+            _playerHandler.BonusSpeedCounter += _playerHandler.BonusSpeed_Dash;
+            _playerHandler.StartCountdown(1);
         }
     }
 
